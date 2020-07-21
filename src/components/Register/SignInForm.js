@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import runtimeEnv from "@mars/heroku-js-runtime-env";
-
+import Step1 from "./Step1";
+import Step2 from "./Step2";
+import Step3 from "./Step3";
 import {
   Typography,
   Paper,
@@ -11,6 +13,7 @@ import {
   InputLabel,
 } from "@material-ui/core";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
+import { loadCSS } from "fg-loadcss/src/loadCSS";
 import withStyles from "@material-ui/core/styles/withStyles";
 import { Link, withRouter } from "react-router-dom";
 const url = runtimeEnv().REACT_APP_API_URL;
@@ -47,25 +50,84 @@ const styles = (theme) => ({
   submit: {
     marginTop: theme.spacing.unit * 3,
   },
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 120,
+  },
+  selectEmpty: {
+    marginTop: theme.spacing(2),
+  },
 });
 
-function SignInForm(props) {
-  const { classes } = props;
-  const initialInputState = {
-    first_name: "",
-    last_name: "",
-    email: "",
-    password: "",
-  };
-  const [eachEntry, setEachEntry] = useState(initialInputState);
-  const { first_name, last_name, email, password } = eachEntry;
+const skillOptions = [
+  { key: "Communication", label: "Communication" },
+  { key: "Management", label: "Management" },
+  { key: "Initiative", label: "Initiative" },
+];
 
-  const handleInputChange = (e) => {
-    setEachEntry({ ...eachEntry, [e.target.name]: e.target.value });
+class SignInForm extends React.Component {
+  // const { classes } = this.props;
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      currentStep: 1,
+      first_name: "",
+      last_name: "",
+      email: "",
+      password: "",
+      role: "",
+      organization: "",
+      skills: [],
+    };
+  }
+  componentDidMount() {
+    loadCSS(
+      "https://use.fontawesome.com/releases/v5.1.0/css/all.css",
+      document.querySelector("#insertion-point-jss")
+    );
+  }
+
+  handleInputChange = (e) => {
+    // debugger;
+    this.setState({
+      [e.target.name]: e.target.value,
+    });
   };
 
-  const handleSubmit = (evt) => {
+  handleChipClick = (skill, evt) => {
+    console.log(this.state);
+    const index = this.state.skills.indexOf(skill.label);
+    // debugger;
+    if (index > -1) {
+      evt.target.parentElement.style.backgroundColor = "#FFFFFF";
+      evt.target.style.color = "rgba(0, 0, 0, 0.87)";
+      let arr = this.state.skills.filter((item) => item !== skill.label);
+      this.setState({
+        skills: arr,
+      });
+    } else {
+      // debugger;
+      evt.target.parentElement.style.backgroundColor = "#3f51b5";
+      evt.target.style.color = "#FFFFFF";
+      this.setState((previousState) => {
+        return {
+          skills: [...previousState.skills, skill.label],
+        };
+      });
+    }
+  };
+  handleSubmit = (evt) => {
     evt.preventDefault();
+    const {
+      email,
+      password,
+      first_name,
+      last_name,
+      skills,
+      organization,
+      role,
+    } = this.state;
     // debugger;
     fetch(`${url}/employees`, {
       method: "POST",
@@ -74,6 +136,9 @@ function SignInForm(props) {
         Accept: "application/json",
       },
       body: JSON.stringify({
+        organization,
+        skills,
+        role,
         email,
         password,
         first_name,
@@ -82,94 +147,144 @@ function SignInForm(props) {
     })
       .then((resp) => resp.json())
       .then((data) => {
-        localStorage.setItem("token", data.jwt);
-        props.handleLogin(data.user);
+        if (data.jwt) {
+          localStorage.setItem("token", data.jwt);
+          this.props.handleLogin(data.user);
+          this.props.history.push("/dashboard");
+        }
       });
   };
+  _next = () => {
+    let currentStep = this.state.currentStep;
+    currentStep = currentStep >= 2 ? 3 : currentStep + 1;
+    this.setState({
+      currentStep: currentStep,
+    });
+  };
 
-  return (
-    <main className={classes.main}>
-      <Paper className={classes.paper}>
-        <Avatar className={classes.avatar}>
-          <LockOutlinedIcon />
-        </Avatar>
-        <Typography component="h1" variant="h5">
-          Register Account
-        </Typography>
-        <form className={classes.form} onSubmit={handleSubmit}>
-          <FormControl margin="normal" required>
-            <InputLabel htmlFor="first_name">First Name</InputLabel>
-            {/* When the name field is changed, setName will run and assign the name to the value in the input. */}
-            <Input
-              id="first_name"
-              name="first_name"
-              autoComplete="off"
-              autoFocus
-              value={first_name}
-              onChange={handleInputChange}
-            />
-          </FormControl>
-          <FormControl margin="normal" required>
-            <InputLabel htmlFor="last_name">Last Name</InputLabel>
-            {/* When the name field is changed, setName will run and assign the name to the value in the input. */}
-            <Input
-              id="last_name"
-              name="last_name"
-              autoComplete="off"
-              autoFocus
-              value={last_name}
-              onChange={handleInputChange}
-            />
-          </FormControl>
-          <FormControl margin="normal" required fullWidth>
-            <InputLabel htmlFor="email">Email Address</InputLabel>
-            {/* When the e-mail field is changed, setEmail will run and assign the e-mail to the value in the input. */}
-            <Input
-              id="email"
-              name="email"
-              autoComplete="off"
-              value={email}
-              onChange={handleInputChange}
-            />
-          </FormControl>
-          <FormControl margin="normal" required fullWidth>
-            <InputLabel htmlFor="password">Password</InputLabel>
-            {/* When the password field is changed, setPassword will run and assign the password to the value in the input. */}
-            <Input
-              name="password"
-              type="password"
-              id="password"
-              autoComplete="off"
-              value={password}
-              onChange={handleInputChange}
-            />
-          </FormControl>
+  _prev = () => {
+    let currentStep = this.state.currentStep;
+    currentStep = currentStep <= 1 ? 1 : currentStep - 1;
+    this.setState({
+      currentStep: currentStep,
+    });
+  };
 
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-          >
-            Register
-          </Button>
+  previousButton() {
+    let currentStep = this.state.currentStep;
+    if (currentStep !== 1) {
+      return (
+        <button
+          className="btn btn-secondary"
+          type="button"
+          onClick={this._prev}
+        >
+          Previous
+        </button>
+      );
+    }
+    return null;
+  }
 
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="secondary"
-            component={Link}
-            to="/login"
-            className={classes.submit}
-          >
-            Go back to Login
-          </Button>
-        </form>
-      </Paper>
-    </main>
-  );
+  nextButton() {
+    let currentStep = this.state.currentStep;
+    if (currentStep < 3) {
+      return (
+        <button
+          className="btn btn-primary float-right"
+          type="button"
+          onClick={this._next}
+        >
+          Next
+        </button>
+      );
+    }
+    return null;
+  }
+
+  render() {
+    const { classes } = this.props;
+    const {
+      first_name,
+      last_name,
+      email,
+      password,
+      role,
+      organization,
+    } = this.state;
+    return (
+      <main className={classes.main}>
+        <Paper className={classes.paper}>
+          <Avatar className={classes.avatar}>
+            <LockOutlinedIcon />
+          </Avatar>
+          <Typography component="h1" variant="h5">
+            Register Account
+          </Typography>
+          <form className={classes.form} onSubmit={this.handleSubmit}>
+            <Step1
+              first_name={first_name}
+              first_name_label="First Name"
+              first_name_name="first_name"
+              last_name={last_name}
+              last_name_label="Last Name"
+              last_name_name="last_name"
+              email={email}
+              email_label="Email"
+              email_name="email"
+              password={password}
+              password_label="Password"
+              password_name="password"
+              handleInputChange={this.handleInputChange}
+              currentStep={this.state.currentStep}
+            />
+            <Step2
+              organization={organization}
+              organization_label="Organization Name"
+              organization_name="organization"
+              role={role}
+              role_name="role"
+              classes={classes}
+              role_label="role-label"
+              handleInputChange={this.handleInputChange}
+              currentStep={this.state.currentStep}
+            />
+            <Step3
+              skillOptions={skillOptions}
+              handleChipClick={this.handleChipClick}
+              handleDelete={this.handleDelete}
+              currentStep={this.state.currentStep}
+            />
+            {this.previousButton()}
+            {this.nextButton()}
+            {this.state.currentStep === 3 ? (
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                color="primary"
+                className={classes.submit}
+              >
+                Register
+              </Button>
+            ) : null}
+
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="secondary"
+              component={Link}
+              to="/login"
+              className={classes.submit}
+            >
+              Go back to Login
+            </Button>
+          </form>
+        </Paper>
+      </main>
+    );
+  }
 }
 
 export default withRouter(withStyles(styles)(SignInForm));

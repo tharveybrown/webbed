@@ -17,33 +17,33 @@ const styles = (theme) => ({
   main: {
     width: "auto",
     display: "block", // Fix IE 11 issue.
-    marginLeft: theme.spacing.unit * 3,
-    marginRight: theme.spacing.unit * 3,
-    [theme.breakpoints.up(400 + theme.spacing.unit * 3 * 2)]: {
+    marginLeft: theme.spacing(3),
+    marginRight: theme.spacing(3),
+    [theme.breakpoints.up(400 + theme.spacing(6))]: {
       width: 400,
       marginLeft: "auto",
       marginRight: "auto",
     },
   },
   paper: {
-    marginTop: theme.spacing.unit * 8,
+    marginTop: theme.spacing(8),
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 3}px ${
-      theme.spacing.unit * 3
-    }px`,
+    padding: `${theme.spacing(2)}px ${theme.spacing(3)}px ${theme.spacing(
+      3
+    )}px`,
   },
   avatar: {
-    margin: theme.spacing.unit,
+    margin: theme.spacing(1),
     backgroundColor: theme.palette.secondary.main,
   },
   form: {
-    width: "100%", // Fix IE 11 issue.
-    marginTop: theme.spacing.unit,
+    width: "100%",
+    marginTop: theme.spacing(1),
   },
   submit: {
-    marginTop: theme.spacing.unit * 3,
+    marginTop: theme.spacing(3),
   },
 });
 
@@ -54,15 +54,9 @@ function LoginForm(props) {
   const initialInputState = { email: "", password: "" };
   const [eachEntry, setEachEntry] = useState(initialInputState);
   const { email, password } = eachEntry;
-
-  // useEffect(() => {
-  //   // Your code here
-  //   // debugger;
-  //   return props.isLoggedIn ? redirect() : null;
-  // }, []);
+  const [errors, setErrors] = useState([]);
 
   const redirect = () => {
-    // debugger;
     props.history.push("/dashboard");
   };
 
@@ -85,11 +79,16 @@ function LoginForm(props) {
     })
       .then((resp) => resp.json())
       .then((data) => {
-        localStorage.setItem("token", data.jwt);
-        props.handleLogin(data.user);
+        if (data.jwt) {
+          localStorage.setItem("token", data.jwt);
+          props.handleLogin(data.user);
+          return redirect();
+        }
+        setErrors(data.errors);
       })
-      .then(redirect());
-    // .then(props.history.push("/dashboard"));
+      .catch((err) => {
+        console.log("error", err);
+      });
   };
 
   return (
@@ -104,7 +103,6 @@ function LoginForm(props) {
         <form className={classes.form} onSubmit={handleSubmit}>
           <FormControl margin="normal" required fullWidth>
             <InputLabel htmlFor="email">Email Address</InputLabel>
-            {/* When the e-mail field is changed, setEmail will run and assign the e-mail to the value in the input. */}
             <Input
               id="email"
               name="email"
@@ -116,7 +114,6 @@ function LoginForm(props) {
           </FormControl>
           <FormControl margin="normal" required fullWidth>
             <InputLabel htmlFor="password">Password</InputLabel>
-            {/* When the password field is changed, setPAssword will run and assign the password to the value in the input. */}
             <Input
               name="password"
               type="password"
@@ -148,6 +145,13 @@ function LoginForm(props) {
             Register
           </Button>
         </form>
+        {errors ? (
+          <ul>
+            {errors.map((err) => (
+              <li>{err}</li>
+            ))}
+          </ul>
+        ) : null}
       </Paper>
     </main>
   );
