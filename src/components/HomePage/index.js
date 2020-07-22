@@ -3,6 +3,13 @@ import { Typography, Paper, Avatar, Button } from "@material-ui/core";
 import VerifiedUserOutlined from "@material-ui/icons/VerifiedUserOutlined";
 import withStyles from "@material-ui/core/styles/withStyles";
 import { Link } from "react-router-dom";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import AppBar from "@material-ui/core/AppBar";
+
+import SideBar from "../Layout/Sidebar";
+import Toolbar from "@material-ui/core/Toolbar";
+
+const drawerWidth = 240;
 
 const styles = (theme) => ({
   main: {
@@ -15,6 +22,9 @@ const styles = (theme) => ({
       marginLeft: "auto",
       marginRight: "auto",
     },
+  },
+  submit: {
+    marginTop: theme.spacing.unit * 3,
   },
   paper: {
     marginTop: theme.spacing.unit * 8,
@@ -29,9 +39,12 @@ const styles = (theme) => ({
     margin: theme.spacing.unit,
     backgroundColor: theme.palette.primary.main,
   },
-  submit: {
-    marginTop: theme.spacing.unit * 3,
-  },
+
+  // content: {
+  //   flexGrow: 1,
+  //   backgroundColor: theme.palette.background.default,
+  //   padding: theme.spacing(3),
+  // },
 });
 
 function HomePage(props) {
@@ -44,7 +57,7 @@ function HomePage(props) {
           <VerifiedUserOutlined />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Hi Steemit User
+          Log in
         </Typography>
 
         <Button
@@ -68,17 +81,6 @@ function HomePage(props) {
           className={classes.submit}
         >
           Login
-        </Button>
-        <Button
-          type="submit"
-          fullWidth
-          variant="contained"
-          color="secondary"
-          component={Link}
-          to="/dashboard"
-          className={classes.submit}
-        >
-          Dashboard
         </Button>
       </Paper>
     </main>

@@ -63,6 +63,13 @@ const skillOptions = [
   { key: "Communication", label: "Communication" },
   { key: "Management", label: "Management" },
   { key: "Initiative", label: "Initiative" },
+  { key: "CodeQuality", label: "Code Quality" },
+  { key: "Leadership", label: "Leadership" },
+  { key: "Resilience", label: "Resilience" },
+  { key: "AnalyticalThinking", label: "Analytical Thinking" },
+  { key: "Design Thinking", label: "Design Thinking" },
+  { key: "Responsiveness", label: "Responsiveness" },
+  { key: "Candor", label: "Candor" },
 ];
 
 class SignInForm extends React.Component {
@@ -107,7 +114,6 @@ class SignInForm extends React.Component {
         skills: arr,
       });
     } else {
-      // debugger;
       evt.target.parentElement.style.backgroundColor = "#3f51b5";
       evt.target.style.color = "#FFFFFF";
       this.setState((previousState) => {
