@@ -7,8 +7,9 @@ export default function Logout(props) {
   return (
     <Button
       type="submit"
-      variant="outlined"
-      color="secondary"
+      // variant="outlined"
+      variant="contained"
+      color="warning"
       component={Link}
       to="/login"
       onClick={props.handleLogout}

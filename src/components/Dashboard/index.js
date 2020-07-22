@@ -55,7 +55,6 @@ class Dashboard extends React.Component {
     let access_token = localStorage.getItem("slack_token");
 
     if (this.props.location.search) {
-      debugger;
       this.setState({ loading: true });
       fetch(`${url}/auth/callback/${this.props.location.search}`, {
         headers: {
@@ -76,8 +75,7 @@ class Dashboard extends React.Component {
           this.props.history.push("/dashboard");
         });
     }
-    if (this.state.slackId) {
-      debugger;
+    if (!this.state.slackId) {
       this.setState({ loading: true });
       fetch(`${url}/slack/users`, {
         headers: {
@@ -104,7 +102,7 @@ class Dashboard extends React.Component {
     return (
       <div className={classes.root}>
         {this.state.slackName ? <h2>{this.state.slackName}</h2> : null}
-        {this.props.isLoggedIn ? (
+        {this.props.isLoggedIn && !this.state.slackName ? (
           <Paper>
             <div className={classes.wrapper}>
               <a

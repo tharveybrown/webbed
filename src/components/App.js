@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 import "../App.css";
-// import Header from "../Header";
 import SignInForm from "./Register/SignInForm";
 import LoginForm from "./Login/LoginForm";
 import runtimeEnv from "@mars/heroku-js-runtime-env";
 import HomePage from "./HomePage";
 import Dashboard from "./Dashboard";
 import withStyles from "@material-ui/core/styles/withStyles";
+import Feedback from "./Feedback/Table";
+import NewFeedback from "./Feedback/NewFeedback";
 import Logout from "./Register/Logout";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import AppBar from "@material-ui/core/AppBar";
@@ -27,7 +28,36 @@ import {
 import { render } from "@testing-library/react";
 
 /*default material-ui theme generation*/
-const theme = createMuiTheme();
+const theme = createMuiTheme({
+  palette: {
+    primary: {
+      main: "#3814DB",
+      light: "#7b48ff",
+      dark: "#0000a8",
+    },
+    secondary: {
+      main: "#E60150",
+      light: "#ff567c",
+      dark: "#ac0029",
+    },
+    // inherit: {
+    //   main: "#00be58",
+    //   light: "#5bf287",
+    //   dark: "#008c2b",
+    // },
+    // warning: {
+    //   main: "#ffeb3b",
+    //   light: "#ffff72",
+    //   dark: "#c8b900",
+    // },
+  },
+  // secondaryButton: {
+  //   backgroundColor: "#00be58",
+  //   "&:hover": {
+  //     backgroundColor: "#008c2b",
+  //   },
+  // },
+});
 
 const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({
@@ -67,10 +97,13 @@ const url = runtimeEnv().REACT_APP_API_URL;
 function App(props) {
   const classes = useStyles();
   const [user, setUser] = useState({});
+  const [coworkers, setCoworkers] = useState([]);
+
   const [isLoggedIn, setLoggedIn] = useState(false);
 
   useEffect(() => {
     autoLogin();
+    fetchCoworkers();
   }, []);
 
   const autoLogin = () => {
@@ -85,6 +118,21 @@ function App(props) {
         .then((data) => {
           setUser(data);
           setLoggedIn(true);
+        });
+    }
+  };
+
+  const fetchCoworkers = () => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      fetch(`${url}/coworkers`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+        .then((resp) => resp.json())
+        .then((data) => {
+          setCoworkers(data);
         });
     }
   };
@@ -106,17 +154,27 @@ function App(props) {
     setUser({});
   };
 
-  const handleAuthClick = () => {
+  const submitFeedback = (evt, feedback) => {
+    evt.preventDefault();
     const token = localStorage.getItem("token");
-    fetch(`${url}/user_is_authed`, {
+    fetch(`${url}/reviews`, {
+      method: "POST",
       headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
         Authorization: `Bearer ${token}`,
       },
+      body: JSON.stringify({
+        targetEmployee: feedback.targetEmployee,
+        skill: feedback.skill,
+        feedback: feedback.feedback,
+      }),
     })
-      .then((resp) => resp.json())
-      .then((data) => console.log(data));
+      .then((res) => res.json())
+      .then((res) => {
+        window.location.pathname = "/feedback";
+      });
   };
-  console.log("USER", user);
   return (
     <MuiThemeProvider theme={theme}>
       <CssBaseline />
@@ -166,9 +224,7 @@ function App(props) {
                   />
                 )}
               />
-              {/* <PrivateRoute path="/dashboard">
-            <Dashboard handleLogout={handleLogout} isLoggedIn={isLoggedIn} />
-          </PrivateRoute> */}
+
               <Route
                 path="/dashboard"
                 render={(props) => (
@@ -179,8 +235,26 @@ function App(props) {
                   />
                 )}
               />
-
-              {/* <Route exact path="/" component={Dashboard} /> */}
+              <Route
+                path="/feedback"
+                render={(props) => (
+                  <Feedback
+                    {...props}
+                    handleLogout={handleLogout}
+                    isLoggedIn={isLoggedIn}
+                  />
+                )}
+              />
+              <Route
+                path="/new"
+                render={(props) => (
+                  <NewFeedback
+                    {...props}
+                    handleSubmit={submitFeedback}
+                    coworkers={coworkers}
+                  />
+                )}
+              />
             </Switch>
           </main>
         </Router>
