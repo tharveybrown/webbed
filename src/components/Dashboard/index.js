@@ -1,21 +1,33 @@
 import React from "react";
-
-import { Link } from "react-router-dom";
-import { Paper, Button } from "@material-ui/core";
+import { Paper } from "@material-ui/core";
 import runtimeEnv from "@mars/heroku-js-runtime-env";
 import { withStyles } from "@material-ui/core/styles";
 import CircularProgress from "@material-ui/core/CircularProgress";
-const url = runtimeEnv().REACT_APP_API_URL;
 
+const url = runtimeEnv().REACT_APP_API_URL;
+const drawerWidth = 240;
 const styles = (theme) => ({
   root: {
     display: "flex",
-    alignItems: "center",
   },
   wrapper: {
     margin: theme.spacing(1),
     position: "relative",
   },
+
+  appBar: {
+    width: `calc(100% - ${drawerWidth}px)`,
+    marginLeft: drawerWidth,
+  },
+  drawer: {
+    width: drawerWidth,
+    flexShrink: 0,
+  },
+  drawerPaper: {
+    width: drawerWidth,
+  },
+  // necessary for content to be below app bar
+  toolbar: theme.mixins.toolbar,
 });
 
 // const dotenv = require("dotenv");
@@ -27,14 +39,23 @@ class Dashboard extends React.Component {
     this.state = {
       slackId: "",
       slackName: "",
+      slackUsers: [],
+      slackChannels: [],
       loading: false,
     };
   }
 
   componentDidMount() {
     const token = localStorage.getItem("token");
+    if (this.props.slackId) {
+      this.setState({
+        slackId: this.props.slackId,
+      });
+    }
+    let access_token = localStorage.getItem("slack_token");
 
     if (this.props.location.search) {
+      debugger;
       this.setState({ loading: true });
       fetch(`${url}/auth/callback/${this.props.location.search}`, {
         headers: {
@@ -44,9 +65,33 @@ class Dashboard extends React.Component {
         .then((res) => res.json())
         .then((res) => {
           localStorage.setItem("slack_token", res.slack_token);
+
           this.setState({
             slackId: res.slack.slack_id,
             slackName: res.slack.name,
+            slackChannels: res.slack.channels,
+            slackUsers: res.slack.slack_users,
+            loading: false,
+          });
+          this.props.history.push("/dashboard");
+        });
+    }
+    if (this.state.slackId) {
+      debugger;
+      this.setState({ loading: true });
+      fetch(`${url}/slack/users`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+        .then((res) => res.json())
+        .then((res) => {
+          this.setState({
+            slackId: res.slack.slack_id,
+            slackName: res.slack.name,
+            slackChannels: res.slack.channels,
+            slackUsers: res.slack.slack_users,
+            loading: false,
             loading: false,
           });
           this.props.history.push("/dashboard");
@@ -61,17 +106,6 @@ class Dashboard extends React.Component {
         {this.state.slackName ? <h2>{this.state.slackName}</h2> : null}
         {this.props.isLoggedIn ? (
           <Paper>
-            <Button
-              type="submit"
-              fullWidth
-              variant="outlined"
-              color="secondary"
-              component={Link}
-              to="/login"
-              onClick={this.props.handleLogout}
-            >
-              Logout
-            </Button>
             <div className={classes.wrapper}>
               <a
                 href={`https://slack.com/oauth/v2/authorize?client_id=${process.env.REACT_APP_SLACK_CLIENT_ID}&scope=channels:history,channels:read,groups:read,users.profile:read,users:read,users:read.email,chat:write&user_scope=channels:history,channels:read,groups:history,im:history&redirect_uri=http://localhost:3000/dashboard`}
@@ -90,6 +124,7 @@ class Dashboard extends React.Component {
             </div>
           </Paper>
         ) : null}
+        {/* </main> */}
       </div>
     );
   }
