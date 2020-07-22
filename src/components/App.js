@@ -20,6 +20,7 @@ import {
   Route,
   Redirect,
 } from "react-router-dom";
+import { render } from "@testing-library/react";
 
 /*default material-ui theme generation*/
 const theme = createMuiTheme();
@@ -32,6 +33,10 @@ function App(props) {
   const [isLoggedIn, setLoggedIn] = useState(false);
 
   useEffect(() => {
+    autoLogin();
+  }, []);
+
+  const autoLogin = () => {
     const token = localStorage.getItem("token");
     if (token) {
       fetch(`${url}/auto_login`, {
@@ -45,7 +50,7 @@ function App(props) {
           setLoggedIn(true);
         });
     }
-  }, []);
+  };
 
   const handleLogin = (user) => {
     setUser(user);
@@ -94,7 +99,7 @@ function App(props) {
       .then((resp) => resp.json())
       .then((data) => console.log(data));
   };
-
+  console.log("USER", user);
   return (
     <MuiThemeProvider theme={theme}>
       <CssBaseline />

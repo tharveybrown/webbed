@@ -27,12 +27,20 @@ class Dashboard extends React.Component {
     this.state = {
       slackId: "",
       slackName: "",
+      slackUsers: [],
+      slackChannels: [],
       loading: false,
     };
   }
 
   componentDidMount() {
     const token = localStorage.getItem("token");
+    if (this.props.slackId) {
+      this.setState({
+        slackId: this.props.slackId,
+      });
+    }
+    // let access_token = localStorage.getItem("slack_token");
 
     if (this.props.location.search) {
       this.setState({ loading: true });
@@ -44,9 +52,32 @@ class Dashboard extends React.Component {
         .then((res) => res.json())
         .then((res) => {
           localStorage.setItem("slack_token", res.slack_token);
+
           this.setState({
             slackId: res.slack.slack_id,
             slackName: res.slack.name,
+            slackChannels: res.slack.channels,
+            slackUsers: res.slack.slack_users,
+            loading: false,
+          });
+          this.props.history.push("/dashboard");
+        });
+    }
+    if (token) {
+      this.setState({ loading: true });
+      fetch(`${url}/slack/users`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+        .then((res) => res.json())
+        .then((res) => {
+          this.setState({
+            slackId: res.slack.slack_id,
+            slackName: res.slack.name,
+            slackChannels: res.slack.channels,
+            slackUsers: res.slack.slack_users,
+            loading: false,
             loading: false,
           });
           this.props.history.push("/dashboard");
