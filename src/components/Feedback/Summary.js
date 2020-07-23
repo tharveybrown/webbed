@@ -54,6 +54,7 @@ class Table extends React.Component {
               errors: [...prevState.errors, res.errors],
             }));
           }
+
           let given = res.filter((r) => !r.pending);
           let pending = res.filter((r) => r.pending);
           this.setState({
