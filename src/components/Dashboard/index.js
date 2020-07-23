@@ -105,9 +105,7 @@ class Dashboard extends React.Component {
         {/* {this.props.isLoggedIn && !this.state.slackName ? ( */}
         <Paper>
           <div className={classes.wrapper}>
-            <a
-              href={`https://slack.com/oauth/v2/authorize?client_id=${process.env.REACT_APP_SLACK_CLIENT_ID}&scope=channels:history,channels:read,groups:read,users.profile:read,users:read,users:read.email,chat:write&user_scope=channels:history,channels:read,groups:history,im:history&redirect_uri=http://localhost:3000/dashboard`}
-            >
+            <a href="https://slack.com/oauth/v2/authorize?client_id=939242411104.1241540577413&scope=channels:history,channels:read,groups:read,users.profile:read,users:read,users:read.email,chat:write&user_scope=channels:history,channels:read,groups:history,im:history">
               <img
                 alt="Add to Slack"
                 height="40"

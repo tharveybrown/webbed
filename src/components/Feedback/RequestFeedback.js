@@ -5,6 +5,9 @@ import Paper from "@material-ui/core/Paper";
 import TextField from "@material-ui/core/TextField";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import FormControl from "@material-ui/core/FormControl";
+import Radio from "@material-ui/core/Radio";
+import RadioGroup from "@material-ui/core/RadioGroup";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Button from "@material-ui/core/Button";
 import Chip from "@material-ui/core/Chip";
 import KeyboardBackspaceRoundedIcon from "@material-ui/icons/KeyboardBackspaceRounded";
@@ -14,7 +17,7 @@ import Select from "@material-ui/core/Select";
 import Input from "@material-ui/core/Input";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
-// import BusinessIcon from "../../"
+import Business from "../../Icons/business.svg";
 
 import { Link } from "react-router-dom";
 
@@ -53,6 +56,22 @@ const styles = (theme) => ({
     marginTop: theme.spacing(3),
   },
 });
+
+function StyledRadio(props) {
+  // const classes = styles();
+  //
+  return (
+    <Radio
+      // className={classes.root}
+      disableRipple
+      color="default"
+      checkedIcon={<img src={Business} width={50} height={50} alt="My logo" />}
+      // icon={<span className={classes.icon} />}
+      {...props}
+    />
+  );
+}
+
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
 const MenuProps = {
@@ -71,29 +90,19 @@ class RequestFeedback extends React.Component {
     this.state = {
       targetEmployees: [],
       skill: "",
+      pending: true,
     };
   }
 
-  handleSearchChange = (evt, value) => {
-    console.log("VALUE", value);
-  };
-
-  // handleSkillSelection = (evt, value) => {
-  //   this.setState({
-  //     skill: value.description,
-  //   });
-  // };
   handleChange = (event) => {
     this.setState({
       [event.target.name]: event.target.value,
     });
-    // setPersonName(event.target.value);
   };
 
   render() {
-    // const classes = styles();
     const { classes } = this.props;
-
+    console.log("PROPS", this.props);
     return (
       <Paper className={classes.paper}>
         <form
@@ -109,10 +118,31 @@ class RequestFeedback extends React.Component {
             <FormLabel component="legend">
               Request an evaluation on any of your skills
             </FormLabel>
+            {this.props.skills ? (
+              <RadioGroup
+                row
+                aria-label="skill"
+                name="skill"
+                onChange={this.handleChange}
+              >
+                {this.props.skills.map((skill) => {
+                  return (
+                    <FormControlLabel
+                      value={skill.description}
+                      control={<Radio color="secondary" />}
+                      label={skill.description}
+                      labelPlacement="bottom"
+                    />
+                  );
+                })}
+              </RadioGroup>
+            ) : null}
           </FormControl>
 
           <FormControl className={classes.formControl}>
-            <InputLabel id="demo-mutiple-chip-label">Chip</InputLabel>
+            <InputLabel id="demo-mutiple-chip-label">
+              Select Recipients
+            </InputLabel>
             <Select
               labelId="demo-mutiple-chip-label"
               id="demo-mutiple-chip"

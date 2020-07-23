@@ -175,6 +175,24 @@ function App(props) {
         window.location.pathname = "/feedback";
       });
   };
+
+  const requestFeedback = (evt, feedback) => {
+    evt.preventDefault();
+    const token = localStorage.getItem("token");
+    fetch(`${url}/feedback/request`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(feedback),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        window.location.pathname = "/feedback";
+      });
+  };
   return (
     <MuiThemeProvider theme={theme}>
       <CssBaseline />
@@ -258,7 +276,12 @@ function App(props) {
               <Route
                 path="/request"
                 render={(props) => (
-                  <RequestFeedback {...props} coworkers={coworkers} />
+                  <RequestFeedback
+                    {...props}
+                    handleSubmit={requestFeedback}
+                    coworkers={coworkers}
+                    skills={user.skills}
+                  />
                 )}
               />
             </Switch>
