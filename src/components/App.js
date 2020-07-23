@@ -5,9 +5,9 @@ import LoginForm from "./Login/LoginForm";
 import runtimeEnv from "@mars/heroku-js-runtime-env";
 import HomePage from "./HomePage";
 import Dashboard from "./Dashboard";
-import withStyles from "@material-ui/core/styles/withStyles";
-import Feedback from "./Feedback/Table";
+import Feedback from "./Feedback/Summary";
 import NewFeedback from "./Feedback/NewFeedback";
+import RequestFeedback from "./Feedback/RequestFeedback";
 import Logout from "./Register/Logout";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import AppBar from "@material-ui/core/AppBar";
@@ -40,11 +40,11 @@ const theme = createMuiTheme({
       light: "#ff567c",
       dark: "#ac0029",
     },
-    // inherit: {
-    //   main: "#00be58",
-    //   light: "#5bf287",
-    //   dark: "#008c2b",
-    // },
+    inherit: {
+      main: "#00be58",
+      light: "#5bf287",
+      dark: "#008c2b",
+    },
     // warning: {
     //   main: "#ffeb3b",
     //   light: "#ffff72",
@@ -253,6 +253,12 @@ function App(props) {
                     handleSubmit={submitFeedback}
                     coworkers={coworkers}
                   />
+                )}
+              />
+              <Route
+                path="/request"
+                render={(props) => (
+                  <RequestFeedback {...props} coworkers={coworkers} />
                 )}
               />
             </Switch>
