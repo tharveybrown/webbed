@@ -12,7 +12,8 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import InboxIcon from "@material-ui/icons/MoveToInbox";
 import MailIcon from "@material-ui/icons/Mail";
-import QuestionAnswerIcon from "@material-ui/icons/QuestionAnswer";
+import HomeRoundedIcon from "@material-ui/icons/HomeRounded";
+import QuestionAnswerRoundedIcon from "@material-ui/icons/QuestionAnswerRounded";
 import "font-awesome/css/font-awesome.css";
 
 const drawerWidth = 240;
@@ -54,7 +55,7 @@ export default function PermanentDrawerLeft() {
         {/* {["Feedback", "Starred", "Send email", "Drafts"].map((text, index) => ( */}
         <ListItem button key="Dashboard" component={Link} to="/dashboard">
           <ListItemIcon>
-            <QuestionAnswerIcon style={{ fontSize: 40 }} />
+            <HomeRoundedIcon style={{ fontSize: 40 }} />
 
             {/* {index % 2 === 0 ? <InboxIcon /> : <MailIcon />} */}
           </ListItemIcon>
@@ -64,14 +65,12 @@ export default function PermanentDrawerLeft() {
       </List>
       <Divider />
       <List>
-        {["All mail", "Trash", "Spam"].map((text, index) => (
-          <ListItem button key={text}>
-            <ListItemIcon>
-              {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-            </ListItemIcon>
-            <ListItemText primary={text} />
-          </ListItem>
-        ))}
+        <ListItem button key="Feedback" component={Link} to="/feedback">
+          <ListItemIcon>
+            <QuestionAnswerRoundedIcon style={{ fontSize: 40 }} />
+          </ListItemIcon>
+          <ListItemText primary="Feedback" />
+        </ListItem>
       </List>
     </Drawer>
   );

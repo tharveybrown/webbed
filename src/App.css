@@ -36,3 +36,7 @@
     transform: rotate(360deg);
   }
 }
+
+.five-score {
+  background-color: "#00be58";
+}
