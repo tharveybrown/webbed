@@ -6,6 +6,8 @@ import Button from "@material-ui/core/Button";
 import ArrowRightAltRoundedIcon from "@material-ui/icons/ArrowRightAltRounded";
 import { Link } from "react-router-dom";
 import runtimeEnv from "@mars/heroku-js-runtime-env";
+import Typography from "@material-ui/core/Typography";
+import Table from "./Table";
 
 const url = runtimeEnv().REACT_APP_API_URL;
 
@@ -28,7 +30,7 @@ const useStyles = (theme) => ({
   },
 });
 
-class Table extends React.Component {
+class Summary extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -55,11 +57,8 @@ class Table extends React.Component {
             }));
           }
 
-          let given = res.filter((r) => !r.pending);
-          let pending = res.filter((r) => r.pending);
           this.setState({
-            given: given,
-            pending: pending,
+            given: res,
           });
         });
       fetch(`${url}/feedback/received`, {
@@ -74,8 +73,11 @@ class Table extends React.Component {
               errors: [...prevState.errors, res.errors],
             }));
           }
+          let pending = res.filter((r) => r.pending);
+          let received = res.filter((r) => !r.pending);
           this.setState({
-            received: res,
+            received: received,
+            pending: pending,
           });
         });
     }
@@ -94,34 +96,71 @@ class Table extends React.Component {
       >
         <Grid item xs={12}>
           <Paper className={classes.paper}>
-            <Button
-              variant="contained"
-              color="primary"
+            <Grid
+              direction="row"
+              justify="space-between"
+              alignItems="center"
+              container
               className={classes.root}
-              endIcon={<ArrowRightAltRoundedIcon />}
-              component={Link}
-              to="/request"
+              xs={12}
+              spacing={2}
             >
-              Request Feedback
-            </Button>
+              <Grid item xs={4}>
+                <Typography variant="h4" gutterBottom>
+                  Received Feedback
+                </Typography>
+              </Grid>
+              <Grid item xs={3}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  // className={classes.root}
+                  endIcon={<ArrowRightAltRoundedIcon />}
+                  component={Link}
+                  to="/request"
+                >
+                  Request Feedback
+                </Button>
+              </Grid>
+            </Grid>
+            <Table feedback={this.state.received} />
           </Paper>
         </Grid>
         <Grid item xs={12}>
           <Paper className={classes.paper}>
-            <Button
-              variant="contained"
-              color="inherit"
-              className={classes.button}
-              endIcon={<ArrowRightAltRoundedIcon />}
-              component={Link}
-              to="/new"
+            <Grid
+              direction="row"
+              justify="space-between"
+              alignItems="center"
+              container
+              className={classes.root}
+              xs={12}
+              spacing={2}
             >
-              Give Feedback
-            </Button>
+              <Grid item xs={4}>
+                <Typography variant="h4" gutterBottom>
+                  Given Feedback
+                </Typography>
+              </Grid>
+              <Grid item xs={3}>
+                <Button
+                  variant="contained"
+                  color="inherit"
+                  className={classes.button}
+                  endIcon={<ArrowRightAltRoundedIcon />}
+                  component={Link}
+                  to="/new"
+                >
+                  Give Feedback
+                </Button>
+              </Grid>
+            </Grid>
+
+            <Table feedback={this.state.given} />
           </Paper>
         </Grid>
       </Grid>
     );
   }
 }
-export default withStyles(useStyles)(Table);
+export default withStyles(useStyles)(Summary);

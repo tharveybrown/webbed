@@ -155,7 +155,7 @@ class SignInForm extends React.Component {
       .then((data) => {
         if (data.jwt) {
           localStorage.setItem("token", data.jwt);
-          this.props.handleLogin(data.user);
+          this.props.handleLogin(data);
           this.props.history.push("/dashboard");
         }
       });

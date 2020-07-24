@@ -75,7 +75,7 @@ class Dashboard extends React.Component {
           this.props.history.push("/dashboard");
         });
     }
-    if (!this.state.slackId) {
+    if (this.props.slackTeam) {
       this.setState({ loading: true });
       fetch(`${url}/slack/users`, {
         headers: {
@@ -102,12 +102,12 @@ class Dashboard extends React.Component {
     return (
       <div className={classes.root}>
         {this.state.slackName ? <h2>{this.state.slackName}</h2> : null}
-        {this.props.isLoggedIn && !this.state.slackName ? (
+        {this.props.isLoggedIn && !this.props.slackTeam ? (
           // {this.props.isLoggedIn ? (
           <Paper>
             <div className={classes.wrapper}>
               <a
-                href={`https://slack.com/oauth/v2/authorize?client_id=${process.env.REACT_APP_SLACK_CLIENT_ID}&scope=channels:history,channels:read,groups:read,users.profile:read,users:read,users:read.email,chat:write&user_scope=channels:history,channels:read,groups:history,im:history&redirect_uri=http://localhost:3000/dashboard`}
+                href={`https://slack.com/oauth/v2/authorize?client_id=${process.env.REACT_APP_SLACK_CLIENT_ID}&scope=channels:history,channels:read,groups:read,users.profile:read,users:read,users:read.email,chat:write&user_scope=channels:history,channels:read,groups:history,im:history&redirect_uri=${process.env.REACT_APP_CLIENT_REDIRECT}`}
               >
                 <img
                   alt="Add to Slack"

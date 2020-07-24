@@ -139,7 +139,9 @@ function App(props) {
 
   const handleLogin = (user) => {
     setUser(user);
+    // debugger;
     setLoggedIn(true);
+    fetchCoworkers();
   };
 
   const isAuthenticated = () => {
@@ -164,11 +166,7 @@ function App(props) {
         Accept: "application/json",
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({
-        targetEmployee: feedback.targetEmployee,
-        skill: feedback.skill,
-        feedback: feedback.feedback,
-      }),
+      body: JSON.stringify(feedback),
     })
       .then((res) => res.json())
       .then((res) => {
@@ -193,61 +191,36 @@ function App(props) {
         window.location.pathname = "/feedback";
       });
   };
+
   return (
     <MuiThemeProvider theme={theme}>
       <CssBaseline />
 
       <div className={classes.root}>
         <Router>
-          {isLoggedIn ? (
-            <>
-              <AppBar position="fixed" className={classes.appBar}>
-                <Toolbar>
-                  <Typography variant="h6" noWrap>
-                    {/* {user.organization ? user.organization.name : null} */}
-                  </Typography>
-                  <Logout handleLogout={handleLogout} isLoggedIn={isLoggedIn} />
-                </Toolbar>
-              </AppBar>
-              <SideBar />
-            </>
-          ) : null}
-
+          <AppBar position="fixed" className={classes.appBar}>
+            <Toolbar>
+              <Typography variant="h6" noWrap>
+                {/* {user.organization ? user.organization.name : null} */}
+              </Typography>
+              <Logout handleLogout={handleLogout} isLoggedIn={isLoggedIn} />
+            </Toolbar>
+          </AppBar>
+          <SideBar isLoggedIn={isLoggedIn} />
           <main className={classes.content}>
             <div className={classes.toolbar} />
-            {!isLoggedIn ? <Route exact path="/" component={HomePage} /> : null}
+            {/* {!isLoggedIn ? <Route exact path="/" component={HomePage} /> : null} */}
             <Switch>
               {/* Routing according to the path entered */}
-              <Route
-                exact
-                path="/register"
-                component={() => <SignInForm handleLogin={handleLogin} />}
-                render={(props) => (
-                  <SignInForm
-                    className={classes.logout}
-                    {...props}
-                    handleLogin={handleLogin}
-                    isLoggedIn={isLoggedIn}
-                  />
-                )}
-              />
-              <Route
-                exact
-                path="/login"
-                render={(props) => (
-                  <LoginForm
-                    {...props}
-                    handleLogin={handleLogin}
-                    isLoggedIn={isLoggedIn}
-                  />
-                )}
-              />
 
+              {/* {isLoggedIn ? ( */}
+              {/* <> */}
               <Route
                 path="/dashboard"
                 render={(props) => (
                   <Dashboard
                     {...props}
+                    slackTeam={user.slack_team ? user.slack_team : null}
                     handleLogout={handleLogout}
                     isLoggedIn={isLoggedIn}
                   />
@@ -284,6 +257,36 @@ function App(props) {
                   />
                 )}
               />
+              {/* </> */}
+              {/* ) : ( */}
+              {/* <> */}
+              {/* <Redirect to="/login" /> */}
+              <Route
+                exact
+                path="/register"
+                component={() => <SignInForm handleLogin={handleLogin} />}
+                render={(props) => (
+                  <SignInForm
+                    className={classes.logout}
+                    {...props}
+                    handleLogin={handleLogin}
+                    isLoggedIn={isLoggedIn}
+                  />
+                )}
+              />
+              <Route
+                exact
+                path="/login"
+                render={(props) => (
+                  <LoginForm
+                    {...props}
+                    handleLogin={handleLogin}
+                    isLoggedIn={isLoggedIn}
+                  />
+                )}
+              />
+              {/* </> */}
+              {/* )} */}
             </Switch>
           </main>
         </Router>
