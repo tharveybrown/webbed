@@ -57,11 +57,8 @@ class Summary extends React.Component {
             }));
           }
 
-          let given = res.filter((r) => !r.pending);
-          let pending = res.filter((r) => r.pending);
           this.setState({
-            given: given,
-            pending: pending,
+            given: res,
           });
         });
       fetch(`${url}/feedback/received`, {
@@ -76,8 +73,11 @@ class Summary extends React.Component {
               errors: [...prevState.errors, res.errors],
             }));
           }
+          let pending = res.filter((r) => r.pending);
+          let received = res.filter((r) => !r.pending);
           this.setState({
-            received: res,
+            received: received,
+            pending: pending,
           });
         });
     }
@@ -96,13 +96,21 @@ class Summary extends React.Component {
       >
         <Grid item xs={12}>
           <Paper className={classes.paper}>
-            <Grid container item xs={12} spacing={2}>
+            <Grid
+              direction="row"
+              justify="space-between"
+              alignItems="center"
+              container
+              className={classes.root}
+              xs={12}
+              spacing={2}
+            >
               <Grid item xs={4}>
                 <Typography variant="h4" gutterBottom>
                   Received Feedback
                 </Typography>
               </Grid>
-              <Grid item xs={4}>
+              <Grid item xs={3}>
                 <Button
                   variant="contained"
                   color="primary"
@@ -120,16 +128,34 @@ class Summary extends React.Component {
         </Grid>
         <Grid item xs={12}>
           <Paper className={classes.paper}>
-            <Button
-              variant="contained"
-              color="inherit"
-              className={classes.button}
-              endIcon={<ArrowRightAltRoundedIcon />}
-              component={Link}
-              to="/new"
+            <Grid
+              direction="row"
+              justify="space-between"
+              alignItems="center"
+              container
+              className={classes.root}
+              xs={12}
+              spacing={2}
             >
-              Give Feedback
-            </Button>
+              <Grid item xs={4}>
+                <Typography variant="h4" gutterBottom>
+                  Given Feedback
+                </Typography>
+              </Grid>
+              <Grid item xs={3}>
+                <Button
+                  variant="contained"
+                  color="inherit"
+                  className={classes.button}
+                  endIcon={<ArrowRightAltRoundedIcon />}
+                  component={Link}
+                  to="/new"
+                >
+                  Give Feedback
+                </Button>
+              </Grid>
+            </Grid>
+
             <Table feedback={this.state.given} />
           </Paper>
         </Grid>

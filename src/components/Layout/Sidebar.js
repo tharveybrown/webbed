@@ -14,6 +14,7 @@ import InboxIcon from "@material-ui/icons/MoveToInbox";
 import MailIcon from "@material-ui/icons/Mail";
 import HomeRoundedIcon from "@material-ui/icons/HomeRounded";
 import QuestionAnswerRoundedIcon from "@material-ui/icons/QuestionAnswerRounded";
+import GroupRoundedIcon from "@material-ui/icons/GroupRounded";
 import "font-awesome/css/font-awesome.css";
 
 const drawerWidth = 240;
@@ -72,6 +73,14 @@ export default function PermanentDrawerLeft({ isLoggedIn }) {
                 <QuestionAnswerRoundedIcon style={{ fontSize: 40 }} />
               </ListItemIcon>
               <ListItemText primary="Feedback" />
+            </ListItem>
+          </List>
+          <List>
+            <ListItem button key="Feedback" component={Link} to="/team">
+              <ListItemIcon>
+                <GroupRoundedIcon style={{ fontSize: 40 }} />
+              </ListItemIcon>
+              <ListItemText primary="Team" />
             </ListItem>
           </List>
         </>

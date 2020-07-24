@@ -8,6 +8,7 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TablePagination from "@material-ui/core/TablePagination";
 import TableRow from "@material-ui/core/TableRow";
+import Typography from "@material-ui/core/Typography";
 
 const columns = [
   { id: "created_at", label: "Date", minWidth: 100 },
@@ -35,14 +36,15 @@ const columns = [
   // },
 ];
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   root: {
     width: "100%",
+    margin: theme.spacing(2),
   },
   container: {
     maxHeight: 300,
   },
-});
+}));
 
 export default function StickyHeadTable(props) {
   const classes = useStyles();
@@ -60,9 +62,11 @@ export default function StickyHeadTable(props) {
 
   return (
     <div className={classes.root}>
-      <TableContainer className={classes.container}>
-        <Table stickyHeader aria-label="sticky table">
-          {/* <TableHead>
+      {props.feedback.length ? (
+        <>
+          <TableContainer className={classes.container}>
+            <Table stickyHeader aria-label="sticky table">
+              {/* <TableHead>
             <TableRow>
               {columns.map((column) => (
                 <TableCell
@@ -75,37 +79,48 @@ export default function StickyHeadTable(props) {
               ))}
             </TableRow>
           </TableHead> */}
-          <TableBody>
-            {props.feedback
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((row) => {
-                return (
-                  <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
-                    {columns.map((column) => {
-                      const value = row[column.id];
-                      return (
-                        <TableCell key={column.id} align={column.align}>
-                          {column.format && typeof value === "number"
-                            ? column.format(value)
-                            : value}
-                        </TableCell>
-                      );
-                    })}
-                  </TableRow>
-                );
-              })}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      <TablePagination
-        rowsPerPageOptions={[10, 25, 100]}
-        component="div"
-        count={props.feedback.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onChangePage={handleChangePage}
-        onChangeRowsPerPage={handleChangeRowsPerPage}
-      />
+              <TableBody>
+                {props.feedback
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((row) => {
+                    return (
+                      <TableRow
+                        hover
+                        role="checkbox"
+                        tabIndex={-1}
+                        key={row.id}
+                      >
+                        {columns.map((column) => {
+                          const value = row[column.id];
+                          return (
+                            <TableCell key={column.id} align={column.align}>
+                              {column.format && typeof value === "number"
+                                ? column.format(value)
+                                : value}
+                            </TableCell>
+                          );
+                        })}
+                      </TableRow>
+                    );
+                  })}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <TablePagination
+            rowsPerPageOptions={[10, 25, 100]}
+            component="div"
+            count={props.feedback.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onChangePage={handleChangePage}
+            onChangeRowsPerPage={handleChangeRowsPerPage}
+          />
+        </>
+      ) : (
+        <Typography variant="h6" gutterBottom>
+          No Feedback!
+        </Typography>
+      )}
     </div>
   );
 }
