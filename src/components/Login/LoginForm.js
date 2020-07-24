@@ -81,7 +81,7 @@ function LoginForm(props) {
       .then((data) => {
         if (data.jwt) {
           localStorage.setItem("token", data.jwt);
-          props.handleLogin(data.user);
+          props.handleLogin(data);
           return redirect();
         }
         setErrors(data.errors);

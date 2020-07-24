@@ -6,6 +6,7 @@ import Button from "@material-ui/core/Button";
 import ArrowRightAltRoundedIcon from "@material-ui/icons/ArrowRightAltRounded";
 import { Link } from "react-router-dom";
 import runtimeEnv from "@mars/heroku-js-runtime-env";
+import Table from "./Table";
 
 const url = runtimeEnv().REACT_APP_API_URL;
 
@@ -28,7 +29,7 @@ const useStyles = (theme) => ({
   },
 });
 
-class Table extends React.Component {
+class Summary extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -104,6 +105,7 @@ class Table extends React.Component {
             >
               Request Feedback
             </Button>
+            <Table feedback={this.state.received} />
           </Paper>
         </Grid>
         <Grid item xs={12}>
@@ -118,10 +120,11 @@ class Table extends React.Component {
             >
               Give Feedback
             </Button>
+            <Table feedback={this.state.given} />
           </Paper>
         </Grid>
       </Grid>
     );
   }
 }
-export default withStyles(useStyles)(Table);
+export default withStyles(useStyles)(Summary);

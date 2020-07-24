@@ -139,6 +139,7 @@ function App(props) {
 
   const handleLogin = (user) => {
     setUser(user);
+    // debugger;
     setLoggedIn(true);
   };
 
@@ -193,6 +194,7 @@ function App(props) {
         window.location.pathname = "/feedback";
       });
   };
+
   return (
     <MuiThemeProvider theme={theme}>
       <CssBaseline />
@@ -248,6 +250,7 @@ function App(props) {
                 render={(props) => (
                   <Dashboard
                     {...props}
+                    slackTeam={user.slack_team ? user.slack_team : null}
                     handleLogout={handleLogout}
                     isLoggedIn={isLoggedIn}
                   />

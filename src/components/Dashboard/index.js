@@ -75,7 +75,7 @@ class Dashboard extends React.Component {
           this.props.history.push("/dashboard");
         });
     }
-    if (this.state.slackId) {
+    if (this.props.slackTeam) {
       this.setState({ loading: true });
       fetch(`${url}/slack/users`, {
         headers: {
@@ -102,7 +102,7 @@ class Dashboard extends React.Component {
     return (
       <div className={classes.root}>
         {this.state.slackName ? <h2>{this.state.slackName}</h2> : null}
-        {this.props.isLoggedIn && !this.state.slackName ? (
+        {this.props.isLoggedIn && !this.props.slackTeam ? (
           // {this.props.isLoggedIn ? (
           <Paper>
             <div className={classes.wrapper}>
