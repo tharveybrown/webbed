@@ -6,6 +6,7 @@ import Button from "@material-ui/core/Button";
 import ArrowRightAltRoundedIcon from "@material-ui/icons/ArrowRightAltRounded";
 import { Link } from "react-router-dom";
 import runtimeEnv from "@mars/heroku-js-runtime-env";
+import Typography from "@material-ui/core/Typography";
 import Table from "./Table";
 
 const url = runtimeEnv().REACT_APP_API_URL;
@@ -95,16 +96,25 @@ class Summary extends React.Component {
       >
         <Grid item xs={12}>
           <Paper className={classes.paper}>
-            <Button
-              variant="contained"
-              color="primary"
-              className={classes.root}
-              endIcon={<ArrowRightAltRoundedIcon />}
-              component={Link}
-              to="/request"
-            >
-              Request Feedback
-            </Button>
+            <Grid container item xs={12} spacing={2}>
+              <Grid item xs={4}>
+                <Typography variant="h4" gutterBottom>
+                  Received Feedback
+                </Typography>
+              </Grid>
+              <Grid item xs={4}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  // className={classes.root}
+                  endIcon={<ArrowRightAltRoundedIcon />}
+                  component={Link}
+                  to="/request"
+                >
+                  Request Feedback
+                </Button>
+              </Grid>
+            </Grid>
             <Table feedback={this.state.received} />
           </Paper>
         </Grid>

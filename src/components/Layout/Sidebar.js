@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
   toolbar: theme.mixins.toolbar,
 }));
 
-export default function PermanentDrawerLeft() {
+export default function PermanentDrawerLeft({ isLoggedIn }) {
   const classes = useStyles();
 
   return (
@@ -51,27 +51,31 @@ export default function PermanentDrawerLeft() {
     >
       <div className={classes.toolbar} />
       <Divider />
-      <List>
-        {/* {["Feedback", "Starred", "Send email", "Drafts"].map((text, index) => ( */}
-        <ListItem button key="Dashboard" component={Link} to="/dashboard">
-          <ListItemIcon>
-            <HomeRoundedIcon style={{ fontSize: 40 }} />
+      {isLoggedIn ? (
+        <>
+          <List>
+            {/* {["Feedback", "Starred", "Send email", "Drafts"].map((text, index) => ( */}
+            <ListItem button key="Dashboard" component={Link} to="/dashboard">
+              <ListItemIcon>
+                <HomeRoundedIcon style={{ fontSize: 40 }} />
 
-            {/* {index % 2 === 0 ? <InboxIcon /> : <MailIcon />} */}
-          </ListItemIcon>
-          <ListItemText primary="Dashboard" />
-        </ListItem>
-        {/* ))} */}
-      </List>
-      <Divider />
-      <List>
-        <ListItem button key="Feedback" component={Link} to="/feedback">
-          <ListItemIcon>
-            <QuestionAnswerRoundedIcon style={{ fontSize: 40 }} />
-          </ListItemIcon>
-          <ListItemText primary="Feedback" />
-        </ListItem>
-      </List>
+                {/* {index % 2 === 0 ? <InboxIcon /> : <MailIcon />} */}
+              </ListItemIcon>
+              <ListItemText primary="Dashboard" />
+            </ListItem>
+            {/* ))} */}
+          </List>
+          <Divider />
+          <List>
+            <ListItem button key="Feedback" component={Link} to="/feedback">
+              <ListItemIcon>
+                <QuestionAnswerRoundedIcon style={{ fontSize: 40 }} />
+              </ListItemIcon>
+              <ListItemText primary="Feedback" />
+            </ListItem>
+          </List>
+        </>
+      ) : null}
     </Drawer>
   );
 }
