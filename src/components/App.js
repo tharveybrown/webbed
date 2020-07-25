@@ -8,6 +8,7 @@ import Dashboard from "./Dashboard";
 import Feedback from "./Feedback/Summary";
 import NewFeedback from "./Feedback/NewFeedback";
 import RequestFeedback from "./Feedback/RequestFeedback";
+import TeamOverview from "./Team/Overview";
 import Logout from "./Register/Logout";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import AppBar from "@material-ui/core/AppBar";
@@ -98,12 +99,13 @@ function App(props) {
   const classes = useStyles();
   const [user, setUser] = useState({});
   const [coworkers, setCoworkers] = useState([]);
-
+  const [slackTeam, setSlackTeam] = useState({});
   const [isLoggedIn, setLoggedIn] = useState(false);
 
   useEffect(() => {
     autoLogin();
     fetchCoworkers();
+    fetchSlackUsers();
   }, []);
 
   const autoLogin = () => {
@@ -137,11 +139,38 @@ function App(props) {
     }
   };
 
+  const fetchSlackUsers = () => {
+    const token = localStorage.getItem("token");
+    fetch(`${url}/slack/users`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        return setSlackTeam(res.slack);
+      });
+  };
+
+  const authenticateSlack = (params) => {
+    const token = localStorage.getItem("token");
+    fetch(`${url}/auth/callback/${params}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        // window.location.pathname = "/dashboard";
+        fetchSlackUsers();
+      });
+  };
+
   const handleLogin = (user) => {
     setUser(user);
-    // debugger;
     setLoggedIn(true);
     fetchCoworkers();
+    fetchSlackUsers();
   };
 
   const isAuthenticated = () => {
@@ -209,18 +238,15 @@ function App(props) {
           <SideBar isLoggedIn={isLoggedIn} />
           <main className={classes.content}>
             <div className={classes.toolbar} />
-            {/* {!isLoggedIn ? <Route exact path="/" component={HomePage} /> : null} */}
-            <Switch>
-              {/* Routing according to the path entered */}
 
-              {/* {isLoggedIn ? ( */}
-              {/* <> */}
+            <Switch>
               <Route
                 path="/dashboard"
                 render={(props) => (
                   <Dashboard
                     {...props}
-                    slackTeam={user.slack_team ? user.slack_team : null}
+                    authenticateSlack={authenticateSlack}
+                    slackTeam={slackTeam ? slackTeam : null}
                     handleLogout={handleLogout}
                     isLoggedIn={isLoggedIn}
                   />
@@ -232,6 +258,17 @@ function App(props) {
                   <Feedback
                     {...props}
                     handleLogout={handleLogout}
+                    isLoggedIn={isLoggedIn}
+                  />
+                )}
+              />
+              <Route
+                path="/team"
+                render={(props) => (
+                  <TeamOverview
+                    {...props}
+                    slackUsers={slackTeam ? slackTeam : null}
+                    coworkers={coworkers}
                     isLoggedIn={isLoggedIn}
                   />
                 )}
