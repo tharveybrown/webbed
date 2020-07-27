@@ -11,15 +11,18 @@
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
     "body-parser": "^1.19.0",
+    "classnames": "^2.2.6",
     "express": "^4.17.1",
     "fg-loadcss": "^3.1.0",
     "font-awesome": "^4.7.0",
+    "material-table": "^1.67.1",
     "node-persist": "^2.1.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",
-    "request": "^2.80.0"
+    "request": "^2.80.0",
+    "tinycolor2": "^1.4.1"
   },
   "scripts": {
     "svgr": "svgr -d src/Icons/ assets/",

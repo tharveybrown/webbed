@@ -53,8 +53,6 @@ class Dashboard extends React.Component {
       });
     }
 
-    let access_token = localStorage.getItem("slack_token");
-
     if (this.props.location.search) {
       this.setState({ loading: true });
       this.props.authenticateSlack(this.props.location.search);
@@ -73,26 +71,26 @@ class Dashboard extends React.Component {
     return (
       <div className={classes.root}>
         {!!slackTeam ? <h2>{slackTeam.name}</h2> : null}
-        {this.props.isLoggedIn && !slackTeam ? (
-          <Paper>
-            <div className={classes.wrapper}>
-              <a
-                href={`https://slack.com/oauth/v2/authorize?client_id=${process.env.REACT_APP_SLACK_CLIENT_ID}&scope=channels:history,channels:read,groups:read,users.profile:read,users:read,users:read.email,chat:write&user_scope=channels:history,channels:read,groups:history,im:history&redirect_uri=${process.env.REACT_APP_CLIENT_REDIRECT}`}
-              >
-                <img
-                  alt="Add to Slack"
-                  height="40"
-                  width="139"
-                  src="https://platform.slack-edge.com/img/add_to_slack.png"
-                  srcSet="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x"
-                />
-                {this.state.loading && (
-                  <CircularProgress size={38} className={classes.fabProgress} />
-                )}
-              </a>
-            </div>
-          </Paper>
-        ) : null}
+        {/* {this.props.isLoggedIn && !slackTeam ? ( */}
+        <Paper>
+          <div className={classes.wrapper}>
+            <a
+              href={`https://slack.com/oauth/v2/authorize?client_id=${process.env.REACT_APP_SLACK_CLIENT_ID}&scope=channels:history,channels:read,groups:read,users.profile:read,users:read,users:read.email,chat:write&user_scope=channels:history,channels:read,groups:history,im:history&redirect_uri=${process.env.REACT_APP_CLIENT_REDIRECT}`}
+            >
+              <img
+                alt="Add to Slack"
+                height="40"
+                width="139"
+                src="https://platform.slack-edge.com/img/add_to_slack.png"
+                srcSet="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x"
+              />
+              {this.state.loading && (
+                <CircularProgress size={38} className={classes.fabProgress} />
+              )}
+            </a>
+          </div>
+        </Paper>
+        {/* ) : null} */}
         {/* </main> */}
       </div>
     );

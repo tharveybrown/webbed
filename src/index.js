@@ -1,6 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
+import { ThemeProvider } from "@material-ui/styles";
+import { CssBaseline } from "@material-ui/core";
+import Themes from "./themes";
 import App from "./components/App";
 import * as serviceWorker from "./serviceWorker";
 import "font-awesome/css/font-awesome.css";
@@ -8,7 +11,10 @@ import "font-awesome/css/font-awesome.css";
 require("dotenv").config();
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <ThemeProvider theme={Themes.default}>
+      <CssBaseline />
+      <App />
+    </ThemeProvider>
   </React.StrictMode>,
   document.getElementById("root")
 );

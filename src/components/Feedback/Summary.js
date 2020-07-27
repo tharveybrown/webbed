@@ -91,7 +91,7 @@ class Summary extends React.Component {
         justify="space-evenly"
         alignItems="stretch"
         direction="row"
-        className={classes.root}
+        // className={classes.root}
         spacing={5}
       >
         <Grid item xs={12}>
