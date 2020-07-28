@@ -6,7 +6,6 @@ import { Link } from "react-router-dom";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import AppBar from "@material-ui/core/AppBar";
 
-import SideBar from "../Layout/Sidebar";
 import Toolbar from "@material-ui/core/Toolbar";
 
 const drawerWidth = 240;

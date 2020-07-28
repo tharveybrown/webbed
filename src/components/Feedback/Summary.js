@@ -17,7 +17,7 @@ const useStyles = (theme) => ({
     margin: theme.spacing(1),
   },
   paper: {
-    height: 400,
+    height: 420,
     margin: theme.spacing(1),
   },
   button: {

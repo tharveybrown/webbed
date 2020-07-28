@@ -1,19 +1,13 @@
 import React, { useState, useEffect } from "react";
 import "../App.css";
-import SignInForm from "./Register/SignInForm";
-import LoginForm from "./Login/LoginForm";
+
 import runtimeEnv from "@mars/heroku-js-runtime-env";
-import HomePage from "./HomePage";
-import Dashboard from "./Dashboard";
-import Feedback from "./Feedback/Summary";
-import NewFeedback from "./Feedback/NewFeedback";
-import RequestFeedback from "./Feedback/RequestFeedback";
-import TeamOverview from "./Team/Overview";
+import Sidebar from "./Layout/Sidebar";
 import Logout from "./Register/Logout";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import AppBar from "@material-ui/core/AppBar";
+import AppRouter from "./router";
 
-import SideBar from "./Layout/Sidebar";
 import Toolbar from "@material-ui/core/Toolbar";
 import { Typography } from "@material-ui/core";
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
@@ -210,6 +204,25 @@ function App(props) {
       });
   };
 
+  const updateFeedback = (evt, target, feedback) => {
+    evt.preventDefault();
+    const token = localStorage.getItem("token");
+    const id = target["row"]["id"];
+    fetch(`${url}/reviews/${id}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(feedback),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        window.location.pathname = "/feedback";
+      });
+  };
+
   const requestFeedback = (evt, feedback) => {
     evt.preventDefault();
     const token = localStorage.getItem("token");
@@ -252,108 +265,34 @@ function App(props) {
 
       <div className={classes.root}>
         <Router>
-          <AppBar position="fixed" className={classes.appBar}>
-            <Toolbar>
-              <Typography variant="h6" noWrap>
-                {/* {user.organization ? user.organization.name : null} */}
-              </Typography>
-              {isLoggedIn ? (
+          <>
+            <Sidebar isLoggedIn={isLoggedIn} handleLogout={handleLogout} />
+            {/* <AppBar position="fixed" className={classes.appBar}>
+              <Toolbar>
+                <Typography variant="h6" noWrap>
+                  
+                </Typography>
+
                 <Logout handleLogout={handleLogout} isLoggedIn={isLoggedIn} />
-              ) : null}
-            </Toolbar>
-          </AppBar>
-          <SideBar isLoggedIn={isLoggedIn} />
+              </Toolbar>
+            </AppBar>
+            {isLoggedIn ? <SideBar isLoggedIn={isLoggedIn} /> : null} */}
+          </>
           <main className={classes.content}>
             <div className={classes.toolbar} />
-
-            <Switch>
-              <Route
-                path="/dashboard"
-                render={(props) => (
-                  <Dashboard
-                    {...props}
-                    authenticateSlack={authenticateSlack}
-                    slackTeam={slackTeam ? slackTeam : null}
-                    handleLogout={handleLogout}
-                    isLoggedIn={isLoggedIn}
-                  />
-                )}
-              />
-              <Route
-                path="/feedback"
-                render={(props) => (
-                  <Feedback
-                    {...props}
-                    handleLogout={handleLogout}
-                    isLoggedIn={isLoggedIn}
-                  />
-                )}
-              />
-              <Route
-                path="/team"
-                render={(props) => (
-                  <TeamOverview
-                    {...props}
-                    slackUsers={slackTeam ? slackTeam : null}
-                    coworkers={coworkers}
-                    isLoggedIn={isLoggedIn}
-                    jobType={user.job_type}
-                    updateTeam={updateTeam}
-                  />
-                )}
-              />
-              <Route
-                path="/new"
-                render={(props) => (
-                  <NewFeedback
-                    {...props}
-                    handleSubmit={submitFeedback}
-                    coworkers={coworkers.coworkers}
-                  />
-                )}
-              />
-              <Route
-                path="/request"
-                render={(props) => (
-                  <RequestFeedback
-                    {...props}
-                    handleSubmit={requestFeedback}
-                    coworkers={coworkers.coworkers}
-                    skills={user.skills}
-                  />
-                )}
-              />
-              {/* </> */}
-              {/* ) : ( */}
-              {/* <> */}
-              {/* <Redirect to="/login" /> */}
-              <Route
-                exact
-                path="/register"
-                component={() => <SignInForm handleLogin={handleLogin} />}
-                render={(props) => (
-                  <SignInForm
-                    className={classes.logout}
-                    {...props}
-                    handleLogin={handleLogin}
-                    isLoggedIn={isLoggedIn}
-                  />
-                )}
-              />
-              <Route
-                exact
-                path="/login"
-                render={(props) => (
-                  <LoginForm
-                    {...props}
-                    handleLogin={handleLogin}
-                    isLoggedIn={isLoggedIn}
-                  />
-                )}
-              />
-              {/* </> */}
-              {/* )} */}
-            </Switch>
+            <AppRouter
+              authenticateSlack={authenticateSlack}
+              slackTeam={slackTeam}
+              handleLogout={handleLogout}
+              isLoggedIn={isLoggedIn}
+              coworkers={coworkers}
+              user={user}
+              updateTeam={updateTeam}
+              submitFeedback={submitFeedback}
+              updateFeedback={updateFeedback}
+              handleLogin={handleLogin}
+              requestFeedback={requestFeedback}
+            />
           </main>
         </Router>
       </div>

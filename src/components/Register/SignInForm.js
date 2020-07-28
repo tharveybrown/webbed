@@ -3,11 +3,13 @@ import runtimeEnv from "@mars/heroku-js-runtime-env";
 import Step1 from "./Step1";
 import Step2 from "./Step2";
 import Step3 from "./Step3";
+
 import {
   Typography,
   Paper,
   Avatar,
   Button,
+  Grid,
   FormControl,
   Input,
   InputLabel,
@@ -180,13 +182,14 @@ class SignInForm extends React.Component {
     let currentStep = this.state.currentStep;
     if (currentStep !== 1) {
       return (
-        <button
-          className="btn btn-secondary"
+        <Button
+          style={{ float: "left" }}
           type="button"
           onClick={this._prev}
+          variant="outlined"
         >
           Previous
-        </button>
+        </Button>
       );
     }
     return null;
@@ -196,13 +199,21 @@ class SignInForm extends React.Component {
     let currentStep = this.state.currentStep;
     if (currentStep < 3) {
       return (
-        <button
-          className="btn btn-primary float-right"
-          type="button"
+        // <Grid
+        //   container
+        //   alignItems="flex-start"
+        //   justify="flex-end"
+        //   direction="row"
+        // >
+        <Button
+          style={{ float: "right" }}
           onClick={this._next}
+          variant="outlined"
+          color="primary"
         >
           Next
-        </button>
+        </Button>
+        // </Grid>
       );
     }
     return null;
