@@ -244,6 +244,7 @@ function App(props) {
         setCoworkers(data);
       });
   };
+  console.log("coworkers", coworkers);
 
   return (
     <MuiThemeProvider theme={theme}>
@@ -307,7 +308,7 @@ function App(props) {
                   <NewFeedback
                     {...props}
                     handleSubmit={submitFeedback}
-                    coworkers={coworkers}
+                    coworkers={coworkers.coworkers}
                   />
                 )}
               />
@@ -317,7 +318,7 @@ function App(props) {
                   <RequestFeedback
                     {...props}
                     handleSubmit={requestFeedback}
-                    coworkers={coworkers}
+                    coworkers={coworkers.coworkers}
                     skills={user.skills}
                   />
                 )}

@@ -12,7 +12,8 @@ import Typography from "@material-ui/core/Typography";
 
 const columns = [
   { id: "created_at", label: "Date", minWidth: 100 },
-  { id: "skill", label: "skill", minWidth: 100 },
+  { id: "skill", label: "Skill", minWidth: 100 },
+  { id: "reviewed_employee.email", label: "Email", minWidth: 100 },
   {
     id: "rating",
     label: "Rating",
@@ -25,8 +26,8 @@ const columns = [
     label: "Description",
     minWidth: 150,
     align: "right",
-    format: (value) => value.toLocaleString("en-US"),
   },
+  // reviewed_employee
   // {
   //   id: "density",
   //   label: "Density",
@@ -39,10 +40,13 @@ const columns = [
 const useStyles = makeStyles((theme) => ({
   root: {
     width: "100%",
-    margin: theme.spacing(2),
+    // margin: theme.spacing(2),
   },
   container: {
     maxHeight: 300,
+  },
+  header: {
+    margin: theme.spacing(2),
   },
 }));
 
@@ -117,7 +121,7 @@ export default function StickyHeadTable(props) {
           />
         </>
       ) : (
-        <Typography variant="h6" gutterBottom>
+        <Typography className={classes.header} variant="h6" gutterBottom>
           No Feedback!
         </Typography>
       )}

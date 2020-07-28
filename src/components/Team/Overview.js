@@ -11,10 +11,9 @@ import useStyles from "./styles";
 import AddDialog from "./AddDialog";
 export default function TeamOverview(props) {
   const { coworkers, slackUsers, jobType, isLoggedIn, updateTeam } = props;
-  console.log("PROPS", props);
+
   const classes = useStyles();
-  console.log("TEAM PROPS", coworkers);
-  console.log("slack PROPS", slackUsers);
+
   const [open, setOpen] = React.useState(false);
   const handleClickOpen = () => {
     setOpen(true);
