@@ -3,11 +3,7 @@ import { Typography, Paper, Avatar, Button } from "@material-ui/core";
 import VerifiedUserOutlined from "@material-ui/icons/VerifiedUserOutlined";
 import withStyles from "@material-ui/core/styles/withStyles";
 import { Link } from "react-router-dom";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import AppBar from "@material-ui/core/AppBar";
-
-import SideBar from "../Layout/Sidebar";
-import Toolbar from "@material-ui/core/Toolbar";
+import { Redirect } from "react-router-dom";
 
 const drawerWidth = 240;
 
@@ -49,42 +45,46 @@ const styles = (theme) => ({
 
 function HomePage(props) {
   const { classes } = props;
+  console.log("HOME PROPS", props);
+  if (props.isLoggedIn) {
+    return <Redirect to="/users" />;
+  } else {
+    return (
+      <main className={classes.main}>
+        <Paper className={classes.paper}>
+          <Avatar className={classes.avatar}>
+            <VerifiedUserOutlined />
+          </Avatar>
+          <Typography component="h1" variant="h5">
+            Log in
+          </Typography>
 
-  return (
-    <main className={classes.main}>
-      <Paper className={classes.paper}>
-        <Avatar className={classes.avatar}>
-          <VerifiedUserOutlined />
-        </Avatar>
-        <Typography component="h1" variant="h5">
-          Log in
-        </Typography>
-
-        <Button
-          type="submit"
-          fullWidth
-          variant="outlined"
-          color="primary"
-          component={Link}
-          to="/register"
-          className={classes.submit}
-        >
-          Register
-        </Button>
-        <Button
-          type="submit"
-          fullWidth
-          variant="contained"
-          color="primary"
-          component={Link}
-          to="/login"
-          className={classes.submit}
-        >
-          Login
-        </Button>
-      </Paper>
-    </main>
-  );
+          <Button
+            type="submit"
+            fullWidth
+            variant="outlined"
+            color="primary"
+            component={Link}
+            to="/register"
+            className={classes.submit}
+          >
+            Register
+          </Button>
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            color="primary"
+            component={Link}
+            to="/login"
+            className={classes.submit}
+          >
+            Login
+          </Button>
+        </Paper>
+      </main>
+    );
+  }
 }
 
 export default withStyles(styles)(HomePage);

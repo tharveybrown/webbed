@@ -1,22 +1,17 @@
 import React, { useState, useEffect } from "react";
 import "../App.css";
-import SignInForm from "./Register/SignInForm";
-import LoginForm from "./Login/LoginForm";
+
 import runtimeEnv from "@mars/heroku-js-runtime-env";
-import HomePage from "./HomePage";
-import Dashboard from "./Dashboard";
-import Feedback from "./Feedback/Summary";
-import NewFeedback from "./Feedback/NewFeedback";
-import RequestFeedback from "./Feedback/RequestFeedback";
+import Sidebar from "./Layout/Sidebar";
 import Logout from "./Register/Logout";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import AppBar from "@material-ui/core/AppBar";
+import AppRouter from "./router";
 
-import SideBar from "./Layout/Sidebar";
 import Toolbar from "@material-ui/core/Toolbar";
 import { Typography } from "@material-ui/core";
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, useTheme } from "@material-ui/core/styles";
 
 /*required components for routing*/
 import {
@@ -26,38 +21,39 @@ import {
   Redirect,
 } from "react-router-dom";
 import { render } from "@testing-library/react";
-
+// var theme = useTheme();
 /*default material-ui theme generation*/
-const theme = createMuiTheme({
-  palette: {
-    primary: {
-      main: "#3814DB",
-      light: "#7b48ff",
-      dark: "#0000a8",
-    },
-    secondary: {
-      main: "#E60150",
-      light: "#ff567c",
-      dark: "#ac0029",
-    },
-    inherit: {
-      main: "#00be58",
-      light: "#5bf287",
-      dark: "#008c2b",
-    },
-    // warning: {
-    //   main: "#ffeb3b",
-    //   light: "#ffff72",
-    //   dark: "#c8b900",
-    // },
-  },
-  // secondaryButton: {
-  //   backgroundColor: "#00be58",
-  //   "&:hover": {
-  //     backgroundColor: "#008c2b",
-  //   },
-  // },
-});
+// var useStyles = createMuiTheme({
+//   palette: {
+//     primary: {
+//       main: "#3814DB",
+//       light: "#7b48ff",
+//       dark: "#0000a8",
+//     },
+//     secondary: {
+//       main: "#E60150",
+//       light: "#ff567c",
+//       dark: "#ac0029",
+//     },
+//     inherit: {
+//       main: "#00be58",
+//       light: "#5bf287",
+//       dark: "#008c2b",
+//     },
+
+// warning: {
+//   main: "#ffeb3b",
+//   light: "#ffff72",
+//   dark: "#c8b900",
+// },
+// },
+// secondaryButton: {
+//   backgroundColor: "#00be58",
+//   "&:hover": {
+//     backgroundColor: "#008c2b",
+//   },
+// },
+// });
 
 const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({
@@ -95,19 +91,22 @@ const useStyles = makeStyles((theme) => ({
 const url = runtimeEnv().REACT_APP_API_URL;
 
 function App(props) {
+  const theme = useTheme();
   const classes = useStyles();
   const [user, setUser] = useState({});
   const [coworkers, setCoworkers] = useState([]);
-
+  const [slackTeam, setSlackTeam] = useState({});
   const [isLoggedIn, setLoggedIn] = useState(false);
 
   useEffect(() => {
     autoLogin();
     fetchCoworkers();
+    // fetchSlackUsers();
   }, []);
 
   const autoLogin = () => {
     const token = localStorage.getItem("token");
+    setLoggedIn(true);
     if (token) {
       fetch(`${url}/auto_login`, {
         headers: {
@@ -117,8 +116,10 @@ function App(props) {
         .then((resp) => resp.json())
         .then((data) => {
           setUser(data);
-          setLoggedIn(true);
+          setSlackTeam(data.slack_team);
         });
+    } else {
+      setLoggedIn(false);
     }
   };
 
@@ -137,11 +138,40 @@ function App(props) {
     }
   };
 
+  const fetchSlackUsers = () => {
+    const token = localStorage.getItem("token");
+    fetch(`${url}/slack/users`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        return setSlackTeam(res.slack_users);
+      });
+  };
+
+  const authenticateSlack = (params) => {
+    const token = localStorage.getItem("token");
+    fetch(`${url}/auth/callback/${params}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        // window.location.pathname = "/dashboard";
+        // fetchSlackUsers();
+        console.log(res);
+      });
+  };
+
   const handleLogin = (user) => {
     setUser(user);
-    // debugger;
+    setSlackTeam(user.slack_team);
     setLoggedIn(true);
     fetchCoworkers();
+    // fetchSlackUsers();
   };
 
   const isAuthenticated = () => {
@@ -174,6 +204,25 @@ function App(props) {
       });
   };
 
+  const updateFeedback = (evt, target, feedback) => {
+    evt.preventDefault();
+    const token = localStorage.getItem("token");
+    const id = target["row"]["id"];
+    fetch(`${url}/reviews/${id}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(feedback),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        window.location.pathname = "/feedback";
+      });
+  };
+
   const requestFeedback = (evt, feedback) => {
     evt.preventDefault();
     const token = localStorage.getItem("token");
@@ -192,102 +241,62 @@ function App(props) {
       });
   };
 
+  const updateTeam = (employee, action, role) => {
+    const token = localStorage.getItem("token");
+    fetch(`${url}/${role}/${action}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(employee),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setCoworkers(data);
+      });
+  };
+  console.log("coworkers", coworkers);
+
   return (
     <MuiThemeProvider theme={theme}>
       <CssBaseline />
 
       <div className={classes.root}>
         <Router>
-          <AppBar position="fixed" className={classes.appBar}>
-            <Toolbar>
-              <Typography variant="h6" noWrap>
-                {/* {user.organization ? user.organization.name : null} */}
-              </Typography>
-              <Logout handleLogout={handleLogout} isLoggedIn={isLoggedIn} />
-            </Toolbar>
-          </AppBar>
-          <SideBar isLoggedIn={isLoggedIn} />
+          <>
+            <Sidebar
+              isLoggedIn={isLoggedIn}
+              organization={user.organization}
+              handleLogout={handleLogout}
+            />
+            {/* <AppBar position="fixed" className={classes.appBar}>
+              <Toolbar>
+                <Typography variant="h6" noWrap>
+                  
+                </Typography>
+
+                <Logout handleLogout={handleLogout} isLoggedIn={isLoggedIn} />
+              </Toolbar>
+            </AppBar>
+            {isLoggedIn ? <SideBar isLoggedIn={isLoggedIn} /> : null} */}
+          </>
           <main className={classes.content}>
             <div className={classes.toolbar} />
-            {/* {!isLoggedIn ? <Route exact path="/" component={HomePage} /> : null} */}
-            <Switch>
-              {/* Routing according to the path entered */}
-
-              {/* {isLoggedIn ? ( */}
-              {/* <> */}
-              <Route
-                path="/dashboard"
-                render={(props) => (
-                  <Dashboard
-                    {...props}
-                    slackTeam={user.slack_team ? user.slack_team : null}
-                    handleLogout={handleLogout}
-                    isLoggedIn={isLoggedIn}
-                  />
-                )}
-              />
-              <Route
-                path="/feedback"
-                render={(props) => (
-                  <Feedback
-                    {...props}
-                    handleLogout={handleLogout}
-                    isLoggedIn={isLoggedIn}
-                  />
-                )}
-              />
-              <Route
-                path="/new"
-                render={(props) => (
-                  <NewFeedback
-                    {...props}
-                    handleSubmit={submitFeedback}
-                    coworkers={coworkers}
-                  />
-                )}
-              />
-              <Route
-                path="/request"
-                render={(props) => (
-                  <RequestFeedback
-                    {...props}
-                    handleSubmit={requestFeedback}
-                    coworkers={coworkers}
-                    skills={user.skills}
-                  />
-                )}
-              />
-              {/* </> */}
-              {/* ) : ( */}
-              {/* <> */}
-              {/* <Redirect to="/login" /> */}
-              <Route
-                exact
-                path="/register"
-                component={() => <SignInForm handleLogin={handleLogin} />}
-                render={(props) => (
-                  <SignInForm
-                    className={classes.logout}
-                    {...props}
-                    handleLogin={handleLogin}
-                    isLoggedIn={isLoggedIn}
-                  />
-                )}
-              />
-              <Route
-                exact
-                path="/login"
-                render={(props) => (
-                  <LoginForm
-                    {...props}
-                    handleLogin={handleLogin}
-                    isLoggedIn={isLoggedIn}
-                  />
-                )}
-              />
-              {/* </> */}
-              {/* )} */}
-            </Switch>
+            <AppRouter
+              authenticateSlack={authenticateSlack}
+              slackTeam={slackTeam}
+              handleLogout={handleLogout}
+              isLoggedIn={isLoggedIn}
+              coworkers={coworkers}
+              user={user}
+              updateTeam={updateTeam}
+              submitFeedback={submitFeedback}
+              updateFeedback={updateFeedback}
+              handleLogin={handleLogin}
+              requestFeedback={requestFeedback}
+            />
           </main>
         </Router>
       </div>

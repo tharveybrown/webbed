@@ -17,7 +17,7 @@ const useStyles = (theme) => ({
     margin: theme.spacing(1),
   },
   paper: {
-    height: 400,
+    height: 420,
     margin: theme.spacing(1),
   },
   button: {
@@ -56,9 +56,11 @@ class Summary extends React.Component {
               errors: [...prevState.errors, res.errors],
             }));
           }
-
+          let pending = res.filter((r) => r.pending);
+          let given = res.filter((r) => !r.pending);
           this.setState({
-            given: res,
+            given: given,
+            pending: pending,
           });
         });
       fetch(`${url}/feedback/received`, {
@@ -68,16 +70,14 @@ class Summary extends React.Component {
       })
         .then((res) => res.json())
         .then((res) => {
-          if (res.errors) {
+          if (res.errors || res.error) {
             return this.setState((prevState) => ({
               errors: [...prevState.errors, res.errors],
             }));
           }
-          let pending = res.filter((r) => r.pending);
-          let received = res.filter((r) => !r.pending);
+
           this.setState({
-            received: received,
-            pending: pending,
+            received: res,
           });
         });
     }
@@ -91,7 +91,7 @@ class Summary extends React.Component {
         justify="space-evenly"
         alignItems="stretch"
         direction="row"
-        className={classes.root}
+        // className={classes.root}
         spacing={5}
       >
         <Grid item xs={12}>
@@ -157,6 +157,39 @@ class Summary extends React.Component {
             </Grid>
 
             <Table feedback={this.state.given} />
+          </Paper>
+        </Grid>
+        <Grid item xs={12}>
+          <Paper className={classes.paper}>
+            <Grid
+              direction="row"
+              justify="space-between"
+              alignItems="center"
+              container
+              className={classes.root}
+              xs={12}
+              spacing={2}
+            >
+              <Grid item xs={4}>
+                <Typography variant="h4" gutterBottom>
+                  Pending Requests
+                </Typography>
+              </Grid>
+              <Grid item xs={3}>
+                {/* <Button
+                  variant="contained"
+                  color="inherit"
+                  className={classes.button}
+                  endIcon={<ArrowRightAltRoundedIcon />}
+                  component={Link}
+                  to="/new"
+                >
+                  Pending Requests
+                </Button> */}
+              </Grid>
+            </Grid>
+
+            <Table feedback={this.state.pending} />
           </Paper>
         </Grid>
       </Grid>

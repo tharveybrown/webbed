@@ -3,13 +3,14 @@ import { Paper } from "@material-ui/core";
 import runtimeEnv from "@mars/heroku-js-runtime-env";
 import { withStyles } from "@material-ui/core/styles";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import Analysis from "../../containers/Analysis";
 
 const url = runtimeEnv().REACT_APP_API_URL;
 const drawerWidth = 240;
 const styles = (theme) => ({
-  root: {
-    display: "flex",
-  },
+  // root: {
+  //   display: "flex",
+  // },
   wrapper: {
     margin: theme.spacing(1),
     position: "relative",
@@ -52,58 +53,26 @@ class Dashboard extends React.Component {
         slackId: this.props.slackId,
       });
     }
-    let access_token = localStorage.getItem("slack_token");
 
     if (this.props.location.search) {
       this.setState({ loading: true });
-      fetch(`${url}/auth/callback/${this.props.location.search}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-        .then((res) => res.json())
-        .then((res) => {
-          localStorage.setItem("slack_token", res.slack_token);
+      this.props.authenticateSlack(this.props.location.search);
 
-          this.setState({
-            slackId: res.slack.slack_id,
-            slackName: res.slack.name,
-            slackChannels: res.slack.channels,
-            slackUsers: res.slack.slack_users,
-            loading: false,
-          });
-          this.props.history.push("/dashboard");
-        });
-    }
-    if (this.props.slackTeam) {
-      this.setState({ loading: true });
-      fetch(`${url}/slack/users`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-        .then((res) => res.json())
-        .then((res) => {
-          this.setState({
-            slackId: res.slack.slack_id,
-            slackName: res.slack.name,
-            slackChannels: res.slack.channels,
-            slackUsers: res.slack.slack_users,
-            loading: false,
-            loading: false,
-          });
-          this.props.history.push("/dashboard");
-        });
+      this.setState({
+        loading: false,
+      });
+      this.props.history.push("/dashboard");
     }
   }
 
   render() {
-    const { classes } = this.props;
+    const { classes, slackTeam } = this.props;
+    console.log("SLACK TEAM", slackTeam);
+
     return (
-      <div className={classes.root}>
-        {this.state.slackName ? <h2>{this.state.slackName}</h2> : null}
-        {this.props.isLoggedIn && !this.props.slackTeam ? (
-          // {this.props.isLoggedIn ? (
+      <div>
+        {/* {!!slackTeam ? <h2>{slackTeam.name}</h2> : null} */}
+        {this.props.isLoggedIn && !slackTeam ? (
           <Paper>
             <div className={classes.wrapper}>
               <a
@@ -122,7 +91,9 @@ class Dashboard extends React.Component {
               </a>
             </div>
           </Paper>
-        ) : null}
+        ) : (
+          <Analysis />
+        )}
         {/* </main> */}
       </div>
     );

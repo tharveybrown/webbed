@@ -39,16 +39,6 @@ const styles = (theme) => ({
   button: {
     margin: theme.spacing(1),
   },
-  five: {
-    backgroundColor: "#5bf287",
-    "&:hover": {
-      background: "#00be58",
-    },
-
-    "&$selected": {
-      backgroundColor: "green",
-    },
-  },
 });
 
 class NewFeedback extends React.Component {
@@ -64,6 +54,17 @@ class NewFeedback extends React.Component {
     };
   }
 
+  componentDidMount() {
+    console.log("NEW PROPS", this.props);
+    if (this.props.location.defaultValues) {
+      let values = this.props.location.defaultValues["row"];
+      this.setState({
+        showSkills: true,
+        targetEmployee: values["reviewed_employee"],
+        skill: values["skill"],
+      });
+    }
+  }
   handleSearchChange = (evt, value) => {
     console.log("VALUE", value);
     if (value == null) {
@@ -100,6 +101,7 @@ class NewFeedback extends React.Component {
   render() {
     // const classes = styles();
     const { classes } = this.props;
+    console.log("STATE", this.state);
 
     return (
       <Paper className={classes.paper}>
@@ -107,46 +109,79 @@ class NewFeedback extends React.Component {
           className={classes.root}
           noValidate
           autoComplete="off"
-          onSubmit={(event) => this.props.handleSubmit(event, this.state)}
+          onSubmit={(event) => {
+            {
+              this.props.location.defaultValues
+                ? this.props.handleUpdate(
+                    event,
+                    this.props.location.defaultValues,
+                    this.state
+                  )
+                : this.props.handleSubmit(event, this.state);
+            }
+          }}
         >
           <Typography variant="h4" gutterBottom>
             Feedback Form
           </Typography>
           <FormControl>
-            <Autocomplete
-              id="combo-box-demo"
-              options={this.props.coworkers}
-              getOptionLabel={(option) => option.email}
-              onChange={this.handleSearchChange}
-              style={{ width: 400 }}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  fullWidth
-                  label="Select User"
-                  variant="outlined"
-                />
-              )}
-            />
+            {this.props.location.defaultValues ? (
+              <TextField
+                disabled
+                style={{ width: 400 }}
+                id="filled-disabled"
+                label={this.state.skill}
+                defaultValue={this.state.skill}
+                variant="filled"
+              />
+            ) : (
+              <Autocomplete
+                id="combo-box-demo"
+                options={this.props.coworkers}
+                getOptionLabel={(option) => option.email}
+                onChange={this.handleSearchChange}
+                style={{ width: 400 }}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    fullWidth
+                    label="Select User"
+                    variant="outlined"
+                  />
+                )}
+              />
+            )}
           </FormControl>
           {this.state.showSkills ? (
             <div>
               <FormControl>
-                <Autocomplete
-                  id="combo-box-demo"
-                  options={this.state.targetEmployee.skills}
-                  getOptionLabel={(option) => option.description}
-                  onChange={this.handleSkillSelection}
-                  style={{ width: 400 }}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      fullWidth
-                      label="Select Skill"
-                      variant="outlined"
-                    />
-                  )}
-                />
+                {this.props.location.defaultValues ? (
+                  <TextField
+                    disabled
+                    style={{ width: 400 }}
+                    id="filled-disabled"
+                    label={this.state.targetEmployee.email}
+                    defaultValue={this.state.targetEmployee.email}
+                    variant="filled"
+                  />
+                ) : (
+                  <Autocomplete
+                    id="combo-box-demo"
+                    options={this.state.targetEmployee.skills}
+                    getOptionLabel={(option) => option.description}
+                    // defaultValue={this.state.skill}
+                    onChange={this.handleSkillSelection}
+                    style={{ width: 400 }}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        fullWidth
+                        label="Select Skill"
+                        variant="outlined"
+                      />
+                    )}
+                  />
+                )}
               </FormControl>
               <FormControl component="fieldset" className={classes.button}>
                 <FormLabel component="legend">Rating</FormLabel>
