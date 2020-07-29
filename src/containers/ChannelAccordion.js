@@ -96,7 +96,9 @@ export default function ChannelAccordion(props) {
             <Button
               variant="contained"
               size="large"
-              onClick={props.fetchKeyWords(props.channel["id"])}
+              onClick={() => {
+                props.fetchKeyWords(props.channel["id"]);
+              }}
               color="primary"
             >
               RUN ANALYSIS
