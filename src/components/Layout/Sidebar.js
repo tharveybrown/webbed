@@ -96,7 +96,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function MiniDrawer({ isLoggedIn, handleLogout }) {
+export default function MiniDrawer(props) {
+  console.log("ORG PROPS", props);
+  // debugger;
+  const { organization, isLoggedIn, handleLogout } = props;
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
@@ -145,9 +148,8 @@ export default function MiniDrawer({ isLoggedIn, handleLogout }) {
               >
                 <MenuIcon />
               </IconButton>
-
               <Typography style={{ flex: 1 }} variant="h6" noWrap>
-                Mini variant drawer
+                {organization ? organization["name"] : null}
               </Typography>
 
               <div>

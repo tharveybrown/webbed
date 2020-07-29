@@ -39,10 +39,6 @@ export default function Asynchronous(props) {
       return setLoading(false);
     }
 
-    // if (options.length > 0) {
-    //   debugger;
-    //   return (active = false);
-    // }
     if (options.length === 0) {
       setLoading(true);
       fetch(`${url}/channels`, {
@@ -57,33 +53,10 @@ export default function Asynchronous(props) {
         });
     }
 
-    // (async () => {
-    //   const response = await fetch(`${url}/channels`, {
-    //     headers: {
-    //       Authorization: `Bearer ${token}`,
-    //     },
-    //   });
-    //   // await sleep(1e3); // For demo purposes.
-    //   const channels = await response.json();
-
-    //   if (active) {
-    //     setOptions(channels["channels"]);
-    //   }
-    // })();
-
     return () => {
       active = false;
     };
   };
-  // React.useEffect(() => {
-
-  // }, [loading]);
-
-  // React.useEffect(() => {
-  //   if (!open) {
-  //     setOptions([]);
-  //   }
-  // }, [open]);
 
   return (
     <div className={classes.root}>
@@ -126,9 +99,7 @@ export default function Asynchronous(props) {
       />
       <Button
         className={classes.button}
-        // style={{ display: "inline-flex" }}
         onClick={() => {
-          console.log(selectedChannel);
           props.handleSearchSubmit(selectedChannel);
         }}
         color="primary"

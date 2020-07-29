@@ -266,7 +266,11 @@ function App(props) {
       <div className={classes.root}>
         <Router>
           <>
-            <Sidebar isLoggedIn={isLoggedIn} handleLogout={handleLogout} />
+            <Sidebar
+              isLoggedIn={isLoggedIn}
+              organization={user.organization}
+              handleLogout={handleLogout}
+            />
             {/* <AppBar position="fixed" className={classes.appBar}>
               <Toolbar>
                 <Typography variant="h6" noWrap>

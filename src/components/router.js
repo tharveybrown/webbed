@@ -97,7 +97,11 @@ function AppRouter(props) {
           />
         )}
       />
-      <Route exact path="/" render={(props) => <HomePage {...props} />} />
+      <Route
+        exact
+        path="/"
+        render={(props) => <HomePage {...props} isLoggedIn={isLoggedIn} />}
+      />
 
       <Route
         path="/team"

@@ -12,17 +12,10 @@ function handleErrors(error) {
     console.log(error.response.status);
     console.log(error.response.headers);
   } else if (error.request) {
-    // The request was made but no response was received
-    // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-    // http.ClientRequest in node.js
-    //
-    // console.log(error.request);
+    console.log(error.request);
   } else {
-    // Something happened in setting up the request that triggered an Error
-    //
-    // console.log("Error", error.message);
+    console.log("Error", error.message);
   }
-  // console.log(error.config);
 }
 
 export function fetchChannelAttribute(channelId, attribute) {
@@ -37,8 +30,25 @@ export function fetchChannelAttribute(channelId, attribute) {
   }
 }
 
-export function fetchAllAttribute(attribute) {
-  return axios.get("/" + attribute).catch(handleErrors);
+export function fetchKeywords(id) {
+  // 5572
+  return axios
+    .get(`/channel/${id}/keywords`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    .catch(handleErrors);
+}
+
+export function fetchTopChannels() {
+  return axios
+    .get("/slack/topchannels", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    .catch(handleErrors);
 }
 
 export function fetchMetadata(attribute) {
@@ -67,5 +77,34 @@ export function fetchAccountAttributeAndMetadata(channelId, attribute) {
         (res) => (finalRes.analysisMetadata = res.data)
       )
     )
+    .then(() => finalRes);
+}
+
+export function fetchTopChannelAttributes() {
+  let finalRes = {};
+  return (
+    fetchTopChannels()
+      .then((res) => {
+        // debugger;
+        if (res) {
+          finalRes.topChannels = res.data.top_channels;
+        }
+      })
+      // .then(() =>
+      //   fetchMetadata(attribute).then(
+      //     (res) => (finalRes.analysisMetadata = res.data)
+      //   )
+      // )
+      .then(() => finalRes)
+  );
+}
+
+export function fetchChannelKeywords(id) {
+  let finalRes = {};
+  return fetchKeywords(id)
+    .then((res) => {
+      finalRes.keywords = res.data;
+    })
+
     .then(() => finalRes);
 }
