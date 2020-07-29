@@ -72,7 +72,7 @@ class Dashboard extends React.Component {
     return (
       <div>
         {/* {!!slackTeam ? <h2>{slackTeam.name}</h2> : null} */}
-        {this.props.isLoggedIn && !slackTeam ? (
+        {slackTeam === undefined ? (
           <Paper>
             <div className={classes.wrapper}>
               <a

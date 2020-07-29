@@ -24,7 +24,7 @@ export const auth = () => {
 const PrivateRoute = ({
   component: Component,
   handleLogout,
-
+  slackTeam,
   authenticateSlack,
   ...rest
 }) => {
@@ -39,6 +39,7 @@ const PrivateRoute = ({
           <Component
             {...props}
             // isLoggedIn={isLoggedIn}
+            slackTeam={slackTeam}
             handleLogout={handleLogout}
             authenticateSlack={authenticateSlack}
           />
@@ -65,6 +66,7 @@ function AppRouter(props) {
     requestFeedback,
   } = props;
   console.log("ISLOGGEDIN", isLoggedIn);
+  console.log("slack", slackTeam);
   return (
     <Switch>
       {/* <RequireAuth> */}
@@ -84,6 +86,7 @@ function AppRouter(props) {
         exact
         path={"/dashboard"}
         component={Dashboard}
+        slackTeam={slackTeam}
         handleLogout={handleLogout}
         authenticateSlack={authenticateSlack}
       />
