@@ -1,9 +1,5 @@
 import React, { Component } from "react";
-
-import PropTypes from "prop-types";
-// import uuid from "uuid";
 import { Bar, defaults } from "react-chartjs-2";
-import { Table, Header, Message, Icon } from "semantic-ui-react";
 
 defaults.global.defaultFontColor = "#90A4AE";
 
@@ -56,6 +52,7 @@ class KeywordChart extends Component {
         data: this.buildEmotions("anger"),
         stack: 2,
       },
+
       {
         label: "Sentiment",
         type: "bar",

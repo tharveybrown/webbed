@@ -2,8 +2,7 @@ import React from "react";
 import { withStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
-import TextField from "@material-ui/core/TextField";
-import Autocomplete from "@material-ui/lab/Autocomplete";
+
 import FormControl from "@material-ui/core/FormControl";
 import Radio from "@material-ui/core/Radio";
 import RadioGroup from "@material-ui/core/RadioGroup";
@@ -17,7 +16,6 @@ import Select from "@material-ui/core/Select";
 import Input from "@material-ui/core/Input";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
-import Business from "../../Icons/business.svg";
 
 import { Link } from "react-router-dom";
 
@@ -56,21 +54,6 @@ const styles = (theme) => ({
     marginTop: theme.spacing(3),
   },
 });
-
-function StyledRadio(props) {
-  // const classes = styles();
-  //
-  return (
-    <Radio
-      // className={classes.root}
-      disableRipple
-      color="default"
-      checkedIcon={<img src={Business} width={50} height={50} alt="My logo" />}
-      // icon={<span className={classes.icon} />}
-      {...props}
-    />
-  );
-}
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;

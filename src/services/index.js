@@ -114,8 +114,10 @@ export function fetchTopChannelAttributes() {
     return fetchTopChannels()
       .then((res) => {
         // debugger;
-        if (res) {
+        if (res.data) {
           finalRes.topChannels = res.data.top_channels;
+        } else {
+          handleErrors(res);
         }
       })
 

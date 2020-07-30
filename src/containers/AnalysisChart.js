@@ -36,7 +36,6 @@ class AnalysisChart extends Component {
         borderColor: "rgba(255,99,132,1)",
         pointBorderColor: "#fff",
         pointBackgroundColor: "rgba(255,99,132,1)",
-        pointBorderColor: "#fff",
         data: this.buildData(this.props.analysis),
       },
       {

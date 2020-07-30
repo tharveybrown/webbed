@@ -1,4 +1,5 @@
-import { makeStyles, withStyles, withTheme } from "@material-ui/core/styles";
+import { withStyles } from "@material-ui/core/styles";
+
 import Grid from "@material-ui/core/Grid";
 import React from "react";
 import Paper from "@material-ui/core/Paper";
@@ -22,10 +23,10 @@ const useStyles = (theme) => ({
   },
   button: {
     margin: theme.spacing(1),
-    backgroundColor: "#00be58",
+    backgroundColor: "#38dd93",
     "&:hover": {
-      backgroundColor: "#008c2b",
-      color: "#FFFFFF",
+      backgroundColor: "#00aa65",
+      // color: "#FFFFFF",
     },
   },
 });
@@ -92,10 +93,9 @@ class Summary extends React.Component {
         justify="space-evenly"
         alignItems="stretch"
         direction="row"
-        // className={classes.root}
         spacing={5}
       >
-        <Grid item xs={12}>
+        <Grid item xs={11}>
           <Paper className={classes.paper}>
             <Grid
               direction="row"
@@ -127,7 +127,7 @@ class Summary extends React.Component {
             <Table feedback={this.state.received} />
           </Paper>
         </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={11}>
           <Paper className={classes.paper}>
             <Grid
               direction="row"
@@ -146,7 +146,6 @@ class Summary extends React.Component {
               <Grid item xs={3}>
                 <Button
                   variant="contained"
-                  color="inherit"
                   className={classes.button}
                   endIcon={<ArrowRightAltRoundedIcon />}
                   component={Link}
@@ -160,7 +159,7 @@ class Summary extends React.Component {
             <Table feedback={this.state.given} />
           </Paper>
         </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={11}>
           <Paper className={classes.paper}>
             <Grid
               direction="row"

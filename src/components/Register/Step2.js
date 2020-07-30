@@ -5,9 +5,7 @@ import {
   Select,
   InputLabel,
   MenuItem,
-  Chip,
 } from "@material-ui/core";
-import DoneIcon from "@material-ui/icons/Done";
 import { makeStyles } from "@material-ui/core/styles";
 const useStyles = makeStyles((theme) => ({
   root: {

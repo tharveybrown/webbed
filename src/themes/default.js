@@ -1,9 +1,13 @@
 import tinycolor from "tinycolor2";
 
-const primary = "#3F63FF";
+// const primary = "#3F63FF";
+
+// const primary = "#3814DB";
+const primary = "#0F54FF";
+
 const secondary = "#E60150";
 const warning = "#F5D365";
-const success = "#00BE58";
+const success = "#37DEAA";
 const info = "#9013FE";
 
 const lightenRate = 7.5;
@@ -29,6 +33,11 @@ export const light = {
       dark: tinycolor(warning).darken(darkenRate).toHexString(),
     },
     success: {
+      main: success,
+      light: tinycolor(success).lighten(lightenRate).toHexString(),
+      dark: tinycolor(success).darken(darkenRate).toHexString(),
+    },
+    customSuccess: {
       main: success,
       light: tinycolor(success).lighten(lightenRate).toHexString(),
       dark: tinycolor(success).darken(darkenRate).toHexString(),
@@ -85,6 +94,9 @@ export const dark = {
       main: info,
       light: tinycolor(info).lighten(lightenRate).toHexString(),
       dark: tinycolor(info).darken(darkenRate).toHexString(),
+    },
+    grey: {
+      600: "#757575",
     },
   },
   customShadows: {

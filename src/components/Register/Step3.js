@@ -1,8 +1,8 @@
 import React from "react";
-import { Paper, Chip, Typography } from "@material-ui/core";
-import DoneIcon from "@material-ui/icons/Done";
+import { Chip, Typography } from "@material-ui/core";
+
 import { makeStyles } from "@material-ui/core/styles";
-import Icon from "@material-ui/core/Icon";
+
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
