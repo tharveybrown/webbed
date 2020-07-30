@@ -97,25 +97,45 @@ export const dark = {
   },
 };
 
+// font-family: 'Roboto Mono', monospace;
+
 export const overrides = {
   typography: {
+    fontFamily: [
+      "Montserrat",
+      "Nunito",
+      '"Segoe UI"',
+      "Roboto",
+      '"Helvetica Neue"',
+      "Arial",
+      "sans-serif",
+      '"Apple Color Emoji"',
+      '"Segoe UI Emoji"',
+      '"Segoe UI Symbol"',
+    ].join(","),
     h1: {
       fontSize: "3rem",
+      fontFamily: "DM Mono",
     },
     h2: {
       fontSize: "2rem",
+      fontFamily: "DM Mono",
     },
     h3: {
       fontSize: "1.64rem",
+      fontFamily: "DM Mono",
     },
     h4: {
       fontSize: "1.5rem",
+      fontFamily: "DM Mono",
     },
     h5: {
       fontSize: "1.285rem",
+      fontFamily: "DM Mono",
     },
     h6: {
       fontSize: "1.142rem",
+      fontFamily: "DM Mono",
     },
   },
 };

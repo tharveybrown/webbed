@@ -18,15 +18,12 @@ class AnalysisChart extends Component {
               .join(" ")
           : attribute.slice(0, 1).toUpperCase() + attribute.slice(1)
     );
-    console.log("LABELS", labels);
-    console.log("LABELS lenght", labels.length);
+
     return labels;
   };
 
   buildData = (analysis) => {
     let data = Object.values(this._serializeAnalysis(analysis));
-    console.log("DATASS", data);
-    console.log("DATS lenght", data.length);
     return data;
   };
 
@@ -91,10 +88,6 @@ class AnalysisChart extends Component {
   };
 
   render() {
-    console.log("DATA", this.props.analysis);
-    // if (this.props.analysis != {}) {
-    // debugger;
-    // }
     let tableRows = [];
     let descriptionLabels = Object.keys(this.props.description);
     descriptionLabels.sort((a, b) => {

@@ -95,8 +95,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function MiniDrawer(props) {
-  console.log("ORG PROPS", props);
-  // debugger;
   const { organization, isLoggedIn, handleLogout, icon, setTheme } = props;
   const classes = useStyles();
   const theme = useTheme();
@@ -146,7 +144,7 @@ export default function MiniDrawer(props) {
               >
                 <MenuIcon />
               </IconButton>
-              <Typography style={{ flex: 1 }} variant="h6" noWrap>
+              <Typography style={{ flex: 1 }} variant="h5" noWrap>
                 {organization ? organization["name"] : null}
               </Typography>
 

@@ -102,7 +102,7 @@ class RequestFeedback extends React.Component {
 
   render() {
     const { classes } = this.props;
-    console.log("PROPS", this.props);
+
     return (
       <Paper className={classes.paper}>
         <form

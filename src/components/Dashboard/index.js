@@ -67,11 +67,9 @@ class Dashboard extends React.Component {
 
   render() {
     const { classes, slackTeam } = this.props;
-    console.log("SLACK TEAM", slackTeam);
 
     return (
       <div>
-        {/* {!!slackTeam ? <h2>{slackTeam.name}</h2> : null} */}
         {slackTeam === undefined ? (
           <Paper>
             <div className={classes.wrapper}>

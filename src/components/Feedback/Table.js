@@ -89,7 +89,7 @@ export default function StickyHeadTable(props) {
   const classes = useStyles();
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  console.log("GIVEN FEEDBACK", props.feedback);
+
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };

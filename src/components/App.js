@@ -4,6 +4,7 @@ import "../App.css";
 import runtimeEnv from "@mars/heroku-js-runtime-env";
 import Sidebar from "./Layout/Sidebar";
 import Logout from "./Register/Logout";
+import { fetchAndUpdateChannels } from "../services";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import AppBar from "@material-ui/core/AppBar";
 import AppRouter from "./router";
@@ -23,39 +24,6 @@ import {
   Redirect,
 } from "react-router-dom";
 import { render } from "@testing-library/react";
-// var theme = useTheme();
-/*default material-ui theme generation*/
-// var useStyles = createMuiTheme({
-//   palette: {
-//     primary: {
-//       main: "#3814DB",
-//       light: "#7b48ff",
-//       dark: "#0000a8",
-//     },
-//     secondary: {
-//       main: "#E60150",
-//       light: "#ff567c",
-//       dark: "#ac0029",
-//     },
-//     inherit: {
-//       main: "#00be58",
-//       light: "#5bf287",
-//       dark: "#008c2b",
-//     },
-
-// warning: {
-//   main: "#ffeb3b",
-//   light: "#ffff72",
-//   dark: "#c8b900",
-// },
-// },
-// secondaryButton: {
-//   backgroundColor: "#00be58",
-//   "&:hover": {
-//     backgroundColor: "#008c2b",
-//   },
-// },
-// });
 
 const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({
@@ -86,14 +54,12 @@ const useStyles = makeStyles((theme) => ({
     },
   },
 
-  // necessary for content to be below app bar
   toolbar: theme.mixins.toolbar,
 }));
 
 const url = runtimeEnv().REACT_APP_API_URL;
 
 function App(props) {
-  // const theme = useTheme();
   const [theme, setTheme] = useState(true);
   let selectedTheme = theme ? light : dark;
   const appliedTheme = createMuiTheme({ ...selectedTheme, ...overrides });
@@ -165,11 +131,7 @@ function App(props) {
       },
     })
       .then((res) => res.json())
-      .then((res) => {
-        // window.location.pathname = "/dashboard";
-        // fetchSlackUsers();
-        console.log(res);
-      });
+      .catch((err) => console.log(err));
   };
 
   const handleLogin = (user) => {
@@ -177,6 +139,7 @@ function App(props) {
     setSlackTeam(user.slack_team);
     setLoggedIn(true);
     fetchCoworkers();
+    fetchAndUpdateChannels();
     // fetchSlackUsers();
   };
 
@@ -263,7 +226,6 @@ function App(props) {
         setCoworkers(data);
       });
   };
-  console.log("coworkers", coworkers);
 
   return (
     <MuiThemeProvider theme={appliedTheme}>
@@ -279,17 +241,6 @@ function App(props) {
               setTheme={() => setTheme(!theme)}
               icon={icon}
             />
-
-            {/* <AppBar position="fixed" className={classes.appBar}>
-              <Toolbar>
-                <Typography variant="h6" noWrap>
-                  
-                </Typography>
-
-                <Logout handleLogout={handleLogout} isLoggedIn={isLoggedIn} />
-              </Toolbar>
-            </AppBar>
-            {isLoggedIn ? <SideBar isLoggedIn={isLoggedIn} /> : null} */}
           </>
           <main className={classes.content}>
             <div className={classes.toolbar} />

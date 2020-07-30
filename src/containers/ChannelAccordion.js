@@ -81,7 +81,7 @@ export default function ChannelAccordion(props) {
   const buttonClassname = clsx({
     [classes.buttonSuccess]: props.success,
   });
-  console.log("ACCORDION PROPS", props);
+
   return (
     <div className={classes.root}>
       <Accordion defaultExpanded>

@@ -4,6 +4,7 @@ import {
   fetchAccountAttributeAndMetadata,
   fetchTopChannelAttributes,
   fetchChannelKeywords,
+  isLoggedIn,
 } from "../services";
 import AnalysisChart from "./AnalysisChart";
 import SearchChannels from "./SearchChannels";
@@ -70,8 +71,12 @@ class Analysis extends Component {
   };
 
   componentDidMount() {
-    window.scrollTo(0, 0);
-    this.handleKeywordSearch();
+    if (!isLoggedIn()) {
+      this.props.history.push("/login");
+    } else {
+      window.scrollTo(0, 0);
+      this.handleKeywordSearch();
+    }
 
     // this._loadAsyncAnalysis();
   }
@@ -111,7 +116,6 @@ class Analysis extends Component {
   handleKeywordSearch = () => {
     if (!this.state.topChannels.length > 0) {
       fetchTopChannelAttributes().then((res) => {
-        console.log("TOPCHANNELS", res);
         this.setState({
           topChannels: res.topChannels,
         });
@@ -167,6 +171,7 @@ class Analysis extends Component {
   };
 
   render() {
+    console.log("SHOW TOP CHNNELS", this.state.showTopChannels);
     const { activeIndex } = this.state;
     const { classes } = this.props;
     return (
@@ -218,14 +223,7 @@ class Analysis extends Component {
                 analysis={this.state.keywords}
               />
             ) : null}
-            {this.state.entities.length > 0 ? (
-              <KeywordChart
-                title="Entity analysis"
-                label="entity"
-                analysis={this.state.entities}
-              />
-            ) : null}
-            {this.state.topChannels.length && this.state.showTopChannels > 0
+            {this.state.topChannels.length && this.state.showTopChannels == true
               ? this.state.topChannels.map((channel) => (
                   <ChannelAccordion
                     success={this.state.nlpSuccess}
@@ -236,6 +234,13 @@ class Analysis extends Component {
                   />
                 ))
               : null}
+            {!this.state.showTopChannels && this.state.entities.length > 0 ? (
+              <KeywordChart
+                title="Entity analysis"
+                label="entity"
+                analysis={this.state.entities}
+              />
+            ) : null}
           </Widget>
         </Grid>
       </Grid>

@@ -105,19 +105,23 @@ class SignInForm extends React.Component {
   };
 
   handleChipClick = (skill, evt) => {
-    console.log(this.state);
     const index = this.state.skills.indexOf(skill.label);
     // debugger;
+
     if (index > -1) {
-      evt.target.parentElement.style.backgroundColor = "#FFFFFF";
+      // evt.target.parentElement.style.border = "1px solid rgba(0, 0, 0, 0.23)";
+      // evt.target.parentElement.style.backgroundColor = "#FFFFFF";
+      // evt.target.style.color = "rgba(0, 0, 0, 0.87)"
+
+      evt.target.parentElement.style.color = "rgba(0, 0, 0, 0.87)";
       evt.target.style.color = "rgba(0, 0, 0, 0.87)";
       let arr = this.state.skills.filter((item) => item !== skill.label);
       this.setState({
         skills: arr,
       });
     } else {
-      evt.target.parentElement.style.backgroundColor = "#3f51b5";
-      evt.target.style.color = "#FFFFFF";
+      evt.target.style.color = "#3F63FF";
+      evt.target.parentElement.style.color = "#3F63FF";
       this.setState((previousState) => {
         return {
           skills: [...previousState.skills, skill.label],

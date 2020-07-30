@@ -55,7 +55,6 @@ class NewFeedback extends React.Component {
   }
 
   componentDidMount() {
-    console.log("NEW PROPS", this.props);
     if (this.props.location.defaultValues) {
       let values = this.props.location.defaultValues["row"];
       this.setState({
@@ -66,7 +65,6 @@ class NewFeedback extends React.Component {
     }
   }
   handleSearchChange = (evt, value) => {
-    console.log("VALUE", value);
     if (value == null) {
       this.setState({
         showSkills: false,
@@ -101,7 +99,6 @@ class NewFeedback extends React.Component {
   render() {
     // const classes = styles();
     const { classes } = this.props;
-    console.log("STATE", this.state);
 
     return (
       <Paper className={classes.paper}>

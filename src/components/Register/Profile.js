@@ -1,20 +1,34 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
+
+import TextField from "@material-ui/core/TextField";
 import { isLoggedIn, deleteAccout } from "../../services/index";
 import Paper from "@material-ui/core/Paper";
 import Widget from "../Team/Widget";
 import { Redirect } from "react-router-dom";
 import Topbar from "./Topbar";
 import Button from "@material-ui/core/Button";
+import FormControl from "@material-ui/core/FormControl";
 
-import useStyles from "../Team/styles";
+const useStyles = makeStyles((theme) => ({
+  root: {
+    // margin: theme.spacing(1),
+
+    "& .MuiTextField-root": {
+      margin: theme.spacing(2),
+      // width: "25ch",
+    },
+  },
+  form: {
+    margin: theme.spacing(2),
+  },
+}));
 
 export default function Profile(props) {
   const classes = useStyles();
   const { user } = props;
   if (!isLoggedIn()) {
-    console.log("NOT LOGGED IN");
     props.history.push("/login");
   }
   return (
@@ -22,7 +36,7 @@ export default function Profile(props) {
       {props.user.id ? (
         <>
           {/* <Topbar /> */}
-          <Grid container spacing={3}>
+          <Grid container>
             <Grid item xs={12}>
               <Widget
                 title={user.first_name + " " + user.last_name}
@@ -31,7 +45,7 @@ export default function Profile(props) {
 
                 bodyClass={classes.fullHeightBody}
               >
-                <Grid item>
+                <Grid className={classes.root} item>
                   <Button
                     variant="outlined"
                     color="secondary"
@@ -46,6 +60,9 @@ export default function Profile(props) {
                     Delete account
                   </Button>
                 </Grid>
+                {/* <Grid item>
+                    
+                  </Grid> */}
               </Widget>
             </Grid>
           </Grid>

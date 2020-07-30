@@ -7,7 +7,7 @@ function Step1(props) {
   }
   return (
     <>
-      <FormControl margin="normal" required>
+      <FormControl fullWidth margin="normal" required>
         <InputLabel htmlFor={props.first_name_name}>
           {props.first_name_label}
         </InputLabel>
@@ -21,7 +21,7 @@ function Step1(props) {
           onChange={props.handleInputChange}
         />
       </FormControl>
-      <FormControl margin="normal" required>
+      <FormControl fullWidth margin="normal" required>
         <InputLabel htmlFor={props.last_name_name}>
           {props.last_name_label}
         </InputLabel>

@@ -29,7 +29,6 @@ const PrivateRoute = ({
   authenticateSlack,
   ...rest
 }) => {
-  console.log("REST", rest);
   const token = localStorage.getItem("token");
   const isAuth = token ? true : false;
   return (
@@ -66,23 +65,9 @@ function AppRouter(props) {
     handleLogin,
     requestFeedback,
   } = props;
-  console.log("ISLOGGEDIN", isLoggedIn);
-  console.log("slack", slackTeam);
+
   return (
     <Switch>
-      {/* <RequireAuth> */}
-      {/* <Route
-        path="/dashboard"
-        render={(props) => (
-          <Dashboard
-            {...props}
-            authenticateSlack={authenticateSlack}
-            slackTeam={slackTeam ? slackTeam : null}
-            handleLogout={handleLogout}
-            isLoggedIn={isLoggedIn}
-          />
-        )}
-      /> */}
       <PrivateRoute
         exact
         path={"/dashboard"}
@@ -174,8 +159,6 @@ function AppRouter(props) {
           />
         )}
       />
-      {/* </> */}
-      {/* )} */}
     </Switch>
   );
 }

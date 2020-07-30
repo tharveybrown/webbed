@@ -55,6 +55,18 @@ export function fetchTopChannels() {
   }
 }
 
+export function fetchChannels() {
+  if (token) {
+    return axios
+      .get("/channels", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .catch(handleErrors);
+  }
+}
+
 export function fetchMetadata(attribute) {
   if (token) {
     return axios
@@ -82,6 +94,18 @@ export function fetchAccountAttributeAndMetadata(channelId, attribute) {
       )
     )
     .then(() => finalRes);
+}
+
+export function fetchAndUpdateChannels() {
+  if (token) {
+    return axios
+      .get("/channels/update", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .catch(handleErrors);
+  }
 }
 
 export function fetchTopChannelAttributes() {
