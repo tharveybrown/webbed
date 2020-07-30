@@ -58,11 +58,11 @@ class Dashboard extends React.Component {
   }
 
   render() {
-    const { classes, slackTeam } = this.props;
+    const { classes } = this.props;
 
     return (
       <div>
-        {slackTeam === undefined ? (
+        {this.props.slackTeam == undefined ? (
           <Paper>
             <div className={classes.wrapper}>
               <a
@@ -82,7 +82,7 @@ class Dashboard extends React.Component {
             </div>
           </Paper>
         ) : (
-          <Analysis />
+          <Analysis slackTeam={this.props.slackTeam} />
         )}
       </div>
     );
