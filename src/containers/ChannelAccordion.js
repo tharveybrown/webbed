@@ -9,13 +9,18 @@ import AccordionSummary from "@material-ui/core/AccordionSummary";
 import AccordionActions from "@material-ui/core/AccordionActions";
 import Typography from "@material-ui/core/Typography";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import Chip from "@material-ui/core/Chip";
+import { green } from "@material-ui/core/colors";
 import Button from "@material-ui/core/Button";
 import Divider from "@material-ui/core/Divider";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     margin: theme.spacing(2),
+  },
+  wrapper: {
+    margin: theme.spacing(1),
+    position: "relative",
   },
   heading: {
     fontSize: theme.typography.pxToRem(15),
@@ -55,11 +60,28 @@ const useStyles = makeStyles((theme) => ({
       textDecoration: "underline",
     },
   },
+  buttonSuccess: {
+    backgroundColor: green[500],
+    "&:hover": {
+      backgroundColor: green[700],
+    },
+  },
+  buttonProgress: {
+    color: green[500],
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    marginTop: -12,
+    marginLeft: -12,
+  },
 }));
 
 export default function ChannelAccordion(props) {
   const classes = useStyles();
-  console.log("ACCORDION PROPS", props);
+  const buttonClassname = clsx({
+    [classes.buttonSuccess]: props.success,
+  });
+
   return (
     <div className={classes.root}>
       <Accordion defaultExpanded>
@@ -93,19 +115,29 @@ export default function ChannelAccordion(props) {
         <Divider />
         <AccordionActions>
           {props.messages ? (
-            <Button
-              variant="contained"
-              size="large"
-              onClick={() => {
-                props.fetchKeyWords(props.channel["id"]);
-              }}
-              color="primary"
-            >
-              RUN ANALYSIS
-            </Button>
+            <div className={classes.wrapper}>
+              <Button
+                variant="contained"
+                size="large"
+                disabled={props.loading}
+                className={buttonClassname}
+                onClick={() => {
+                  props.fetchKeyWords(props.channel["id"]);
+                }}
+                color="primary"
+              >
+                RUN ANALYSIS
+              </Button>
+              {props.loading && (
+                <CircularProgress
+                  size={24}
+                  className={classes.buttonProgress}
+                />
+              )}
+            </div>
           ) : (
             <>
-              <Alert className={classes.actionColumn} severity="error">
+              <Alert className={classes.actionColumn} severity="warning">
                 You need to invite Webbed bot to this channel.
               </Alert>
               <CopyToClipboard

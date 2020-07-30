@@ -9,6 +9,7 @@ import Feedback from "./Feedback/Summary";
 import NewFeedback from "./Feedback/NewFeedback";
 import RequestFeedback from "./Feedback/RequestFeedback";
 import TeamOverview from "./Team/Overview";
+import Profile from "./Register/Profile";
 import Logout from "./Register/Logout";
 
 // Simulated authentication obj, maybe this would be retrieved in cookies
@@ -28,7 +29,6 @@ const PrivateRoute = ({
   authenticateSlack,
   ...rest
 }) => {
-  console.log("REST", rest);
   const token = localStorage.getItem("token");
   const isAuth = token ? true : false;
   return (
@@ -65,23 +65,9 @@ function AppRouter(props) {
     handleLogin,
     requestFeedback,
   } = props;
-  console.log("ISLOGGEDIN", isLoggedIn);
-  console.log("slack", slackTeam);
+
   return (
     <Switch>
-      {/* <RequireAuth> */}
-      {/* <Route
-        path="/dashboard"
-        render={(props) => (
-          <Dashboard
-            {...props}
-            authenticateSlack={authenticateSlack}
-            slackTeam={slackTeam ? slackTeam : null}
-            handleLogout={handleLogout}
-            isLoggedIn={isLoggedIn}
-          />
-        )}
-      /> */}
       <PrivateRoute
         exact
         path={"/dashboard"}
@@ -90,6 +76,7 @@ function AppRouter(props) {
         handleLogout={handleLogout}
         authenticateSlack={authenticateSlack}
       />
+
       <Route
         path="/feedback"
         render={(props) => (
@@ -141,21 +128,10 @@ function AppRouter(props) {
           />
         )}
       />
-      {/* </RequireAuth> */}
-      {/* <Route
-    path="/"
-    render={(props) => (
-      <HomePage {...props} isLoggedIn={isLoggedIn} />
-    )}
-  /> */}
-      {/* </> */}
-      {/* ) : ( */}
-      {/* <> */}
-      {/* <Redirect to="/login" /> */}
+
       <Route
         exact
         path="/register"
-        component={() => <SignInForm handleLogin={handleLogin} />}
         render={(props) => (
           <SignInForm
             // className={classes.logout}
@@ -163,6 +139,13 @@ function AppRouter(props) {
             handleLogin={handleLogin}
             isLoggedIn={isLoggedIn}
           />
+        )}
+      />
+      <Route
+        exact
+        path="/profile"
+        render={(props) => (
+          <Profile {...props} user={user} isLoggedIn={isLoggedIn} />
         )}
       />
       <Route
@@ -176,8 +159,6 @@ function AppRouter(props) {
           />
         )}
       />
-      {/* </> */}
-      {/* )} */}
     </Switch>
   );
 }

@@ -89,7 +89,7 @@ export default function StickyHeadTable(props) {
   const classes = useStyles();
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  console.log("GIVEN FEEDBACK", props.feedback);
+
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -132,14 +132,15 @@ export default function StickyHeadTable(props) {
                         {columns.map((column) => {
                           let value = row[column.id];
                           if (column.id == "reviewed_employee") {
-                            console.log(
-                              "REVIEWED EMPLOYEE",
-                              row.reviewed_employee
-                            );
-                            value =
-                              row.reviewed_employee.first_name +
-                              " " +
-                              row.reviewed_employee.last_name;
+                            if (row.reviewed_employee) {
+                              value =
+                                row.reviewed_employee.first_name +
+                                " " +
+                                row.reviewed_employee.last_name;
+                            } else {
+                              console.log("ERR", row.reviewed_employee);
+                              value = "";
+                            }
                           }
                           return (
                             <TableCell key={column.id} align={column.align}>

@@ -1,8 +1,10 @@
 import React, { Component } from "react";
-import { Radar } from "react-chartjs-2";
+import { Radar, defaults } from "react-chartjs-2";
 import PropTypes from "prop-types";
 // import uuid from "uuid";
+import Link from "@material-ui/core/Link";
 import { Table, Header, Message, Icon } from "semantic-ui-react";
+defaults.global.defaultFontColor = "#90A4AE";
 
 class AnalysisChart extends Component {
   buildLabels = (analysis) => {
@@ -16,15 +18,12 @@ class AnalysisChart extends Component {
               .join(" ")
           : attribute.slice(0, 1).toUpperCase() + attribute.slice(1)
     );
-    console.log("LABELS", labels);
-    console.log("LABELS lenght", labels.length);
+
     return labels;
   };
 
   buildData = (analysis) => {
     let data = Object.values(this._serializeAnalysis(analysis));
-    console.log("DATASS", data);
-    console.log("DATS lenght", data.length);
     return data;
   };
 
@@ -89,10 +88,6 @@ class AnalysisChart extends Component {
   };
 
   render() {
-    console.log("DATA", this.props.analysis);
-    // if (this.props.analysis != {}) {
-    // debugger;
-    // }
     let tableRows = [];
     let descriptionLabels = Object.keys(this.props.description);
     descriptionLabels.sort((a, b) => {
@@ -129,13 +124,12 @@ class AnalysisChart extends Component {
 
         <Message attached="bottom">
           <Icon name="external" />
-          <a
+          <Link
             target="_blank"
-            rel="noopener noreferrer"
             href="https://console.bluemix.net/docs/services/personality-insights/numeric.html#numeric"
           >
             Learn more about the scoring from IBM Watson.
-          </a>
+          </Link>
         </Message>
       </div>
     );

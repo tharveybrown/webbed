@@ -24,8 +24,6 @@ import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import InboxIcon from "@material-ui/icons/MoveToInbox";
-import MailIcon from "@material-ui/icons/Mail";
 
 const drawerWidth = 240;
 
@@ -78,9 +76,9 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   profileButton: {
-    justifyContent: "space-between",
+    // justifyContent: "space-between",
 
-    marginRight: theme.spacing(16),
+    marginLeft: theme.spacing(2),
   },
   toolbar: {
     display: "flex",
@@ -97,9 +95,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function MiniDrawer(props) {
-  console.log("ORG PROPS", props);
-  // debugger;
-  const { organization, isLoggedIn, handleLogout } = props;
+  const { organization, isLoggedIn, handleLogout, icon, setTheme } = props;
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
@@ -148,18 +144,28 @@ export default function MiniDrawer(props) {
               >
                 <MenuIcon />
               </IconButton>
-              <Typography style={{ flex: 1 }} variant="h6" noWrap>
+              <Typography style={{ flex: 1 }} variant="h5" noWrap>
                 {organization ? organization["name"] : null}
               </Typography>
 
               <div>
                 <Logout handleLogout={handleLogout} />
                 <IconButton
+                  edge="end"
+                  color="inherit"
+                  aria-label="mode"
+                  className={classes.profileButton}
+                  onClick={() => setTheme(!theme)}
+                >
+                  {icon}
+                </IconButton>
+                <IconButton
                   aria-label="account of current user"
                   aria-controls="menu-appbar"
                   aria-haspopup="true"
                   onClick={handleMenu}
                   color="inherit"
+                  className={classes.profileButton}
                 >
                   <AccountCircle />
                 </IconButton>
@@ -173,7 +179,13 @@ export default function MiniDrawer(props) {
                   open={propfileOpen}
                   onClose={handleClose}
                 >
-                  <MenuItem onClick={handleClose}>Profile</MenuItem>
+                  <MenuItem
+                    component={Link}
+                    to="/profile"
+                    onClick={handleClose}
+                  >
+                    Profile
+                  </MenuItem>
                   {/* <MenuItem onClick={handleClose}>My account</MenuItem> */}
                 </Menu>
               </div>

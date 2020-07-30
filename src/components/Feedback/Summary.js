@@ -51,11 +51,12 @@ class Summary extends React.Component {
       })
         .then((res) => res.json())
         .then((res) => {
-          if (res.errors) {
+          if (res.errors || res.error) {
             return this.setState((prevState) => ({
               errors: [...prevState.errors, res.errors],
             }));
           }
+
           let pending = res.filter((r) => r.pending);
           let given = res.filter((r) => !r.pending);
           this.setState({
@@ -75,9 +76,9 @@ class Summary extends React.Component {
               errors: [...prevState.errors, res.errors],
             }));
           }
-
+          let received = res.filter((r) => !r.pending);
           this.setState({
-            received: res,
+            received: received,
           });
         });
     }

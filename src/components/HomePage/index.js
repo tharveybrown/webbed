@@ -45,9 +45,9 @@ const styles = (theme) => ({
 
 function HomePage(props) {
   const { classes } = props;
-  console.log("HOME PROPS", props);
+
   if (props.isLoggedIn) {
-    return <Redirect to="/users" />;
+    return <Redirect to="/dashboard" />;
   } else {
     return (
       <main className={classes.main}>

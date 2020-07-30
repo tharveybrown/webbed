@@ -32,7 +32,7 @@ export default function Asynchronous(props) {
 
   const searchChannels = () => {
     setOpen(true);
-    console.log("OPTIONS", options);
+
     let active = true;
 
     if (open && options.length === 0) {
