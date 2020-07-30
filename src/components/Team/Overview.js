@@ -1,16 +1,16 @@
-import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import React, { useEffect } from "react";
 import Grid from "@material-ui/core/Grid";
 
-import Paper from "@material-ui/core/Paper";
 import Widget from "./Widget";
 import EditableTable from "./EditableTable";
 import Button from "@material-ui/core/Button";
 import AddCircleOutlineRoundedIcon from "@material-ui/icons/AddCircleOutlineRounded";
 import useStyles from "./styles";
 import AddDialog from "./AddDialog";
+
+import { isLoggedIn } from "../../services";
 export default function TeamOverview(props) {
-  const { coworkers, slackUsers, jobType, isLoggedIn, updateTeam } = props;
+  const { coworkers, updateTeam } = props;
 
   const classes = useStyles();
 
@@ -22,18 +22,23 @@ export default function TeamOverview(props) {
   const handleClose = () => {
     setOpen(false);
   };
+  useEffect(() => {
+    if (!isLoggedIn()) {
+      props.history.push("/login");
+    }
+  }, []);
 
   return (
     <div>
-      <Grid container spacing={3}>
-        {props.jobType == "Employee" ? null : (
-          <Grid item xs={12}>
-            {/* <Widget
-            title="Your team"
-            // upperTitle
-            // className={classes.card}
-            bodyClass={classes.fullHeightBody}
-          > */}
+      <Grid
+        justify="space-evenly"
+        alignItems="stretch"
+        direction="row"
+        container
+        spacing={3}
+      >
+        {props.jobType === "Employee" ? null : (
+          <Grid item xs={11}>
             <EditableTable
               data={coworkers.team}
               team={coworkers.coworkers}
@@ -42,7 +47,7 @@ export default function TeamOverview(props) {
             {/* </Widget> */}
           </Grid>
         )}
-        <Grid item xs={12}>
+        <Grid item xs={11}>
           {coworkers.manager ? (
             <Widget
               title="Your manager"
@@ -86,23 +91,7 @@ export default function TeamOverview(props) {
             </Widget>
           )}
         </Grid>
-        <Grid container>
-          <Grid item xs={12}>
-            <Paper className={classes.paper}></Paper>
-          </Grid>
-        </Grid>
       </Grid>
-
-      {/* <Grid
-        container
-        justify="space-evenly"
-        alignItems="stretch"
-        direction="column"
-        className={classes.root}
-        spacing={5}
-      >
-        
-      </Grid> */}
     </div>
   );
 }

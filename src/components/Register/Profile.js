@@ -1,15 +1,10 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
-
-import TextField from "@material-ui/core/TextField";
 import { isLoggedIn, deleteAccout } from "../../services/index";
-import Paper from "@material-ui/core/Paper";
 import Widget from "../Team/Widget";
-import { Redirect } from "react-router-dom";
-import Topbar from "./Topbar";
+// import Topbar from "./Topbar";
 import Button from "@material-ui/core/Button";
-import FormControl from "@material-ui/core/FormControl";
 
 const useStyles = makeStyles((theme) => ({
   root: {

@@ -79,6 +79,12 @@ class NewFeedback extends React.Component {
   };
 
   handleSkillSelection = (evt, value) => {
+    // debugger;
+    if (!value) {
+      return this.setState({
+        skill: "",
+      });
+    }
     this.setState({
       skill: value.description,
     });
@@ -98,6 +104,7 @@ class NewFeedback extends React.Component {
 
   render() {
     // const classes = styles();
+    console.log("SKILLS", this.state.targetEmployee.skills);
     const { classes } = this.props;
 
     return (
@@ -149,7 +156,7 @@ class NewFeedback extends React.Component {
               />
             )}
           </FormControl>
-          {this.state.showSkills ? (
+          {this.state.showSkills && this.state.targetEmployee.skills ? (
             <div>
               <FormControl>
                 {this.props.location.defaultValues ? (

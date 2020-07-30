@@ -1,16 +1,12 @@
 import React from "react";
 import { Paper } from "@material-ui/core";
-import runtimeEnv from "@mars/heroku-js-runtime-env";
+
 import { withStyles } from "@material-ui/core/styles";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Analysis from "../../containers/Analysis";
 
-const url = runtimeEnv().REACT_APP_API_URL;
 const drawerWidth = 240;
 const styles = (theme) => ({
-  // root: {
-  //   display: "flex",
-  // },
   wrapper: {
     margin: theme.spacing(1),
     position: "relative",
@@ -31,9 +27,6 @@ const styles = (theme) => ({
   toolbar: theme.mixins.toolbar,
 });
 
-// const dotenv = require("dotenv");
-
-/*It is created as a component function in the react hooks.*/
 class Dashboard extends React.Component {
   constructor(props) {
     super(props);
@@ -47,7 +40,6 @@ class Dashboard extends React.Component {
   }
 
   componentDidMount() {
-    const token = localStorage.getItem("token");
     if (this.props.slackId) {
       this.setState({
         slackId: this.props.slackId,
@@ -92,7 +84,6 @@ class Dashboard extends React.Component {
         ) : (
           <Analysis />
         )}
-        {/* </main> */}
       </div>
     );
   }

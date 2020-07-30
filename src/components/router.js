@@ -2,7 +2,7 @@ import React from "react";
 import { Route, Switch, Redirect } from "react-router-dom";
 import SignInForm from "./Register/SignInForm";
 import LoginForm from "./Login/LoginForm";
-import runtimeEnv from "@mars/heroku-js-runtime-env";
+
 import HomePage from "./HomePage";
 import Dashboard from "./Dashboard";
 import Feedback from "./Feedback/Summary";
@@ -10,11 +10,8 @@ import NewFeedback from "./Feedback/NewFeedback";
 import RequestFeedback from "./Feedback/RequestFeedback";
 import TeamOverview from "./Team/Overview";
 import Profile from "./Register/Profile";
-import Logout from "./Register/Logout";
 
-// Simulated authentication obj, maybe this would be retrieved in cookies
 export const auth = () => {
-  // SET TO TRUE TO SIMULATE LOGGED IN
   const token = localStorage.getItem("token");
   if (token) {
     return true;

@@ -23,12 +23,12 @@ const useStyles = makeStyles((theme) => ({
 export default function MaterialTableDemo(props) {
   const classes = useStyles();
   const [employeeToAdd, setEmployeeToAdd] = useState({});
-  const [state, setState] = useState({
+  const [state] = useState({
     columns: [
       { title: "First Name", field: "first_name" },
       { title: "Last Name", field: "last_name" },
       { title: "Email", field: "email" },
-      { title: "On Slack", field: "slack_id" },
+      // { title: "On Slack", field: "slack_id" },
     ],
   });
   const [open, setOpen] = React.useState(false);
@@ -44,8 +44,27 @@ export default function MaterialTableDemo(props) {
     <div>
       <MaterialTable
         title="Your Team"
+        stickyHeader
+        className={classes.container}
         columns={state.columns}
         data={props.data}
+        options={{
+          cellStyle: {
+            borderTop: "1px solid lightGray",
+          },
+          headerStyle: {
+            borderTop: "1px solid lightGray",
+          },
+          rowStyle: {
+            borderTop: "1px solid lightGray",
+          },
+          maxBodyHeight: "calc(100vh - 372px)",
+          minBodyHeight: "calc(100vh - 372px)",
+          pageSize: 10,
+          pageSizeOptions: [10, 20, 50],
+          actionsColumnIndex: -1,
+          // padding: classes.table,
+        }}
         actions={[
           {
             title: "",

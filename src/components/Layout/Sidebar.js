@@ -2,7 +2,8 @@ import React from "react";
 import clsx from "clsx";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import MenuIcon from "@material-ui/icons/Menu";
-import Logout from "../Register/Logout";
+import triangle from "./triangle.svg";
+
 import { Link } from "react-router-dom";
 import HomeRoundedIcon from "@material-ui/icons/HomeRounded";
 import QuestionAnswerRoundedIcon from "@material-ui/icons/QuestionAnswerRounded";
@@ -102,10 +103,6 @@ export default function MiniDrawer(props) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const propfileOpen = Boolean(anchorEl);
 
-  const handleChange = (event) => {
-    // setAuth(event.target.checked);
-  };
-
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -144,12 +141,20 @@ export default function MiniDrawer(props) {
               >
                 <MenuIcon />
               </IconButton>
-              <Typography style={{ flex: 1 }} variant="h5" noWrap>
+              <img src={triangle} className="App-logo" alt="logo" />
+              <Typography style={{ flex: 1 }} variant="h3" noWrap>
+                Webbed
+              </Typography>
+              <Typography
+                className={classes.toolbar}
+                style={{ align: "center" }}
+                variant="h4"
+                noWrap
+              >
                 {organization ? organization["name"] : null}
               </Typography>
 
               <div>
-                <Logout handleLogout={handleLogout} />
                 <IconButton
                   edge="end"
                   color="inherit"
@@ -185,6 +190,9 @@ export default function MiniDrawer(props) {
                     onClick={handleClose}
                   >
                     Profile
+                  </MenuItem>
+                  <MenuItem component={Link} to="/login" onClick={handleLogout}>
+                    Logout
                   </MenuItem>
                   {/* <MenuItem onClick={handleClose}>My account</MenuItem> */}
                 </Menu>

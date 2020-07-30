@@ -18,6 +18,9 @@ export default makeStyles((theme) => ({
   // widgetRoot: {
   //   boxShadow: theme.customShadows.widget,
   // },
+  container: {
+    maxHeight: 300,
+  },
   widgetBody: {
     paddingBottom: theme.spacing(3),
     paddingRight: theme.spacing(3),
@@ -25,6 +28,9 @@ export default makeStyles((theme) => ({
   },
   noPadding: {
     padding: 0,
+  },
+  table: {
+    padding: theme.spacing(3),
   },
   card: {
     minHeight: "100%",

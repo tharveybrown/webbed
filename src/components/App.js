@@ -3,26 +3,18 @@ import "../App.css";
 
 import runtimeEnv from "@mars/heroku-js-runtime-env";
 import Sidebar from "./Layout/Sidebar";
-import Logout from "./Register/Logout";
-import { fetchAndUpdateChannels } from "../services";
+
 import CssBaseline from "@material-ui/core/CssBaseline";
-import AppBar from "@material-ui/core/AppBar";
 import AppRouter from "./router";
 import { light, dark, overrides } from "../themes/default";
-import Toolbar from "@material-ui/core/Toolbar";
-import { Typography } from "@material-ui/core";
+
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
-import { makeStyles, useTheme } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import Brightness3Icon from "@material-ui/icons/Brightness3";
 import Brightness7Icon from "@material-ui/icons/Brightness7";
 
 /*required components for routing*/
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Redirect,
-} from "react-router-dom";
+import { BrowserRouter as Router } from "react-router-dom";
 import { render } from "@testing-library/react";
 
 const drawerWidth = 240;
@@ -139,7 +131,7 @@ function App(props) {
     setSlackTeam(user.slack_team);
     setLoggedIn(true);
     fetchCoworkers();
-    fetchAndUpdateChannels();
+    // fetchAndUpdateChannels();
     // fetchSlackUsers();
   };
 
@@ -150,6 +142,7 @@ function App(props) {
   };
 
   const handleLogout = () => {
+    // fetchAndUpdateChannels();
     localStorage.clear();
     isAuthenticated();
     setUser({});

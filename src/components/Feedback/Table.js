@@ -1,14 +1,13 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
-import Paper from "@material-ui/core/Paper";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
 import { Link } from "react-router-dom";
 import ArrowRightAltRoundedIcon from "@material-ui/icons/ArrowRightAltRounded";
-import TableHead from "@material-ui/core/TableHead";
+
 import TablePagination from "@material-ui/core/TablePagination";
 import TableRow from "@material-ui/core/TableRow";
 import Typography from "@material-ui/core/Typography";
@@ -48,18 +47,44 @@ const formatDate = (date) => {
 const formatRating = (value) => {
   switch (value) {
     case 1:
-      return <Button style={{ background: "#EFD8E0" }}>Poor</Button>;
+      return (
+        <Button style={{ background: "#ff6c7d", color: "#4A4A4A" }}>
+          Poor
+        </Button>
+      );
     case 2:
-      return <Button style={{ background: "#FBF8E5" }}>Okay</Button>;
+      return (
+        <Button style={{ background: "#f9f770", color: "#4A4A4A" }}>
+          Okay
+        </Button>
+      );
 
     case 3:
-      return <Button style={{ background: "#D9D9DB" }}>Satisfactory</Button>;
+      return (
+        <Button style={{ background: "#D9D9DB", color: "#4A4A4A" }}>
+          Satisfactory
+        </Button>
+      );
 
     case 4:
-      return <Button style={{ background: "#F4F8E5" }}>Good</Button>;
+      return (
+        <Button style={{ background: "#F4F8E5", color: "#4A4A4A" }}>
+          Good
+        </Button>
+      );
     //
     case 5:
-      return <Button style={{ background: "#E6F8EE" }}>Excellent</Button>;
+      return (
+        <Button style={{ background: "#79f7b4", color: "#4A4A4A" }}>
+          Excellent
+        </Button>
+      );
+    default:
+      return (
+        <Typography variant="button" display="block" gutterBottom>
+          No rating
+        </Typography>
+      );
   }
 };
 
@@ -105,19 +130,6 @@ export default function StickyHeadTable(props) {
         <>
           <TableContainer className={classes.container}>
             <Table stickyHeader aria-label="sticky table">
-              {/* <TableHead>
-            <TableRow>
-              {columns.map((column) => (
-                <TableCell
-                  key={column.id}
-                  align={column.align}
-                  style={{ minWidth: column.minWidth }}
-                >
-                  {column.label}
-                </TableCell>
-              ))}
-            </TableRow>
-          </TableHead> */}
               <TableBody>
                 {props.feedback
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
@@ -131,7 +143,7 @@ export default function StickyHeadTable(props) {
                       >
                         {columns.map((column) => {
                           let value = row[column.id];
-                          if (column.id == "reviewed_employee") {
+                          if (column.id === "reviewed_employee") {
                             if (row.reviewed_employee) {
                               value =
                                 row.reviewed_employee.first_name +
@@ -145,7 +157,7 @@ export default function StickyHeadTable(props) {
                           return (
                             <TableCell key={column.id} align={column.align}>
                               {column.format ? column.format(value) : value}
-                              {column.id == "pending" && value == true ? (
+                              {column.id === "pending" && value === true ? (
                                 <Link
                                   to={{
                                     pathname: "/new",
