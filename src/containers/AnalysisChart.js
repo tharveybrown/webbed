@@ -1,8 +1,10 @@
 import React, { Component } from "react";
-import { Radar } from "react-chartjs-2";
+import { Radar, defaults } from "react-chartjs-2";
 import PropTypes from "prop-types";
 // import uuid from "uuid";
+import Link from "@material-ui/core/Link";
 import { Table, Header, Message, Icon } from "semantic-ui-react";
+defaults.global.defaultFontColor = "#90A4AE";
 
 class AnalysisChart extends Component {
   buildLabels = (analysis) => {
@@ -129,13 +131,12 @@ class AnalysisChart extends Component {
 
         <Message attached="bottom">
           <Icon name="external" />
-          <a
+          <Link
             target="_blank"
-            rel="noopener noreferrer"
             href="https://console.bluemix.net/docs/services/personality-insights/numeric.html#numeric"
           >
             Learn more about the scoring from IBM Watson.
-          </a>
+          </Link>
         </Message>
       </div>
     );

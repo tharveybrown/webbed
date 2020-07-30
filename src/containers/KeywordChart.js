@@ -2,8 +2,10 @@ import React, { Component } from "react";
 
 import PropTypes from "prop-types";
 // import uuid from "uuid";
-import { Bar } from "react-chartjs-2";
+import { Bar, defaults } from "react-chartjs-2";
 import { Table, Header, Message, Icon } from "semantic-ui-react";
+
+defaults.global.defaultFontColor = "#90A4AE";
 
 class KeywordChart extends Component {
   buildEmotions = (type) => {
@@ -19,24 +21,25 @@ class KeywordChart extends Component {
   };
 
   chartData = () => ({
-    labels: this.props.analysis.map((data) => data["keyword"]),
+    labels: this.props.analysis.map((data) => data[this.props.label]),
 
     datasets: [
       {
         label: "Sadness",
-        backgroundColor: "#C19CFF",
+        backgroundColor: "rgba(153, 102, 255, 0.6)",
+
         data: this.buildEmotions("sadness"),
         stack: 2,
       },
       {
         label: "Joy",
-        backgroundColor: "#8BD7D8",
+        backgroundColor: "#82B1FF",
         data: this.buildEmotions("joy"),
         stack: 2,
       },
       {
         label: "Fear",
-        backgroundColor: "#FFBC76",
+        backgroundColor: "#FFAB40",
 
         data: this.buildEmotions("fear"),
         stack: 2,
@@ -49,14 +52,14 @@ class KeywordChart extends Component {
       },
       {
         label: "Anger",
-        backgroundColor: "#FF89A2",
+        backgroundColor: "rgba(255, 99, 132, 0.6)",
         data: this.buildEmotions("anger"),
         stack: 2,
       },
       {
         label: "Sentiment",
         type: "bar",
-        backgroundColor: "#D0D2D5",
+        backgroundColor: "#78909C",
         data: this.props.analysis.map((data) => data["sentiment"]["score"]),
         stack: 1,
       },
@@ -67,10 +70,13 @@ class KeywordChart extends Component {
     maintainAspectRatio: false,
     legend: {
       position: "top",
+      labels: {
+        fontColor: "#B0BEC5",
+      },
     },
     title: {
       display: true,
-      text: "Keyword sentiment analysis",
+      text: this.props.title,
     },
 
     scales: {

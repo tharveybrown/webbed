@@ -32,23 +32,27 @@ export function fetchChannelAttribute(channelId, attribute) {
 
 export function fetchKeywords(id) {
   // 5572
-  return axios
-    .get(`/channel/${id}/keywords`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-    .catch(handleErrors);
+  if (token) {
+    return axios
+      .get(`/channel/${id}/keywords`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .catch(handleErrors);
+  }
 }
 
 export function fetchTopChannels() {
-  return axios
-    .get("/slack/topchannels", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-    .catch(handleErrors);
+  if (token) {
+    return axios
+      .get("/slack/topchannels", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .catch(handleErrors);
+  }
 }
 
 export function fetchMetadata(attribute) {
@@ -82,29 +86,50 @@ export function fetchAccountAttributeAndMetadata(channelId, attribute) {
 
 export function fetchTopChannelAttributes() {
   let finalRes = {};
-  return (
-    fetchTopChannels()
+  if (token) {
+    return fetchTopChannels()
       .then((res) => {
         // debugger;
         if (res) {
           finalRes.topChannels = res.data.top_channels;
         }
       })
-      // .then(() =>
-      //   fetchMetadata(attribute).then(
-      //     (res) => (finalRes.analysisMetadata = res.data)
-      //   )
-      // )
+
       .then(() => finalRes)
-  );
+      .catch(handleErrors);
+  }
 }
 
 export function fetchChannelKeywords(id) {
   let finalRes = {};
+
   return fetchKeywords(id)
     .then((res) => {
-      finalRes.keywords = res.data;
+      finalRes.keywords = res.data.keywords;
+      finalRes.entities = res.data.entities;
     })
 
     .then(() => finalRes);
+}
+
+export function isLoggedIn() {
+  const token = localStorage.getItem("token");
+  if (token) {
+    console.log("TOKEN TRUE", token);
+    return true;
+  }
+  console.log("TOKEN false", token);
+  return false;
+}
+
+export function deleteAccout(id) {
+  if (token) {
+    return axios
+      .delete(`/employees/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .catch(handleErrors);
+  }
 }

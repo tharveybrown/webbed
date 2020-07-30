@@ -13,6 +13,7 @@ import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import Widget from "../components/Team/Widget";
 import useStyles from "../components/Team/styles";
+
 import { withStyles } from "@material-ui/core/styles";
 
 import Paper from "@material-ui/core/Paper";
@@ -38,12 +39,16 @@ const styles = (theme) => ({
 
 class Analysis extends Component {
   state = {
+    showTopChannels: false,
     activeIndex: 0,
     channel: {},
     topChannels: [],
     isPanelLoading: true,
     numberOfHandles: 0,
     keywords: [],
+    entities: [],
+    nlpLoading: false,
+    nlpSuccess: false,
     analysis: {
       personality: {},
       // needs: {},
@@ -66,15 +71,24 @@ class Analysis extends Component {
 
   componentDidMount() {
     window.scrollTo(0, 0);
+    this.handleKeywordSearch();
 
     // this._loadAsyncAnalysis();
   }
 
   fetchKeyWords = (id) => {
+    this.setState({
+      nlpLoading: true,
+      nlpSuccess: false,
+    });
     fetchChannelKeywords(id).then((res) => {
       this.setState({
+        entities: res.entities,
         keywords: res.keywords,
-        topChannels: [],
+        showTopChannels: false,
+        nlpLoading: false,
+        nlpSuccess: true,
+        // topChannels: [],
       });
     });
   };
@@ -95,12 +109,14 @@ class Analysis extends Component {
   };
 
   handleKeywordSearch = () => {
-    fetchTopChannelAttributes().then((res) => {
-      console.log("TOPCHANNELS", res);
-      this.setState({
-        topChannels: res.topChannels,
+    if (!this.state.topChannels.length > 0) {
+      fetchTopChannelAttributes().then((res) => {
+        console.log("TOPCHANNELS", res);
+        this.setState({
+          topChannels: res.topChannels,
+        });
       });
-    });
+    }
   };
 
   _loadAsyncAnalysis = () => {
@@ -186,23 +202,40 @@ class Analysis extends Component {
             <Button
               variant="outlined"
               color="primary"
-              onClick={this.handleKeywordSearch}
+              onClick={() => {
+                this.handleKeywordSearch();
+                this.setState({
+                  showTopChannels: true,
+                });
+              }}
             >
               Run
             </Button>
-            {this.state.topChannels.length > 0
+            {this.state.keywords.length > 0 ? (
+              <KeywordChart
+                title="Keyword analysis"
+                label="keyword"
+                analysis={this.state.keywords}
+              />
+            ) : null}
+            {this.state.entities.length > 0 ? (
+              <KeywordChart
+                title="Entity analysis"
+                label="entity"
+                analysis={this.state.entities}
+              />
+            ) : null}
+            {this.state.topChannels.length && this.state.showTopChannels > 0
               ? this.state.topChannels.map((channel) => (
                   <ChannelAccordion
+                    success={this.state.nlpSuccess}
+                    loading={this.state.nlpLoading}
                     fetchKeyWords={this.fetchKeyWords}
                     channel={channel["channel"]}
                     messages={channel["messages"]}
                   />
                 ))
               : null}
-
-            {this.state.keywords.length > 0 ? (
-              <KeywordChart analysis={this.state.keywords} />
-            ) : null}
           </Widget>
         </Grid>
       </Grid>

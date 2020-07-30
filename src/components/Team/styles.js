@@ -15,9 +15,9 @@ export default makeStyles((theme) => ({
     justifyContent: "space-between",
     alignItems: "center",
   },
-  widgetRoot: {
-    boxShadow: theme.customShadows.widget,
-  },
+  // widgetRoot: {
+  //   boxShadow: theme.customShadows.widget,
+  // },
   widgetBody: {
     paddingBottom: theme.spacing(3),
     paddingRight: theme.spacing(3),

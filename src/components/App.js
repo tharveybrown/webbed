@@ -7,11 +7,13 @@ import Logout from "./Register/Logout";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import AppBar from "@material-ui/core/AppBar";
 import AppRouter from "./router";
-
+import { light, dark, overrides } from "../themes/default";
 import Toolbar from "@material-ui/core/Toolbar";
 import { Typography } from "@material-ui/core";
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
+import Brightness3Icon from "@material-ui/icons/Brightness3";
+import Brightness7Icon from "@material-ui/icons/Brightness7";
 
 /*required components for routing*/
 import {
@@ -71,7 +73,7 @@ const useStyles = makeStyles((theme) => ({
   },
   content: {
     flexGrow: 1,
-    backgroundColor: theme.palette.background.default,
+    // backgroundColor: theme.palette.background.default,
     padding: theme.spacing(3),
   },
   logout: {
@@ -91,7 +93,11 @@ const useStyles = makeStyles((theme) => ({
 const url = runtimeEnv().REACT_APP_API_URL;
 
 function App(props) {
-  const theme = useTheme();
+  // const theme = useTheme();
+  const [theme, setTheme] = useState(true);
+  let selectedTheme = theme ? light : dark;
+  const appliedTheme = createMuiTheme({ ...selectedTheme, ...overrides });
+  const icon = !theme ? <Brightness7Icon /> : <Brightness3Icon />;
   const classes = useStyles();
   const [user, setUser] = useState({});
   const [coworkers, setCoworkers] = useState([]);
@@ -260,7 +266,7 @@ function App(props) {
   console.log("coworkers", coworkers);
 
   return (
-    <MuiThemeProvider theme={theme}>
+    <MuiThemeProvider theme={appliedTheme}>
       <CssBaseline />
 
       <div className={classes.root}>
@@ -270,7 +276,10 @@ function App(props) {
               isLoggedIn={isLoggedIn}
               organization={user.organization}
               handleLogout={handleLogout}
+              setTheme={() => setTheme(!theme)}
+              icon={icon}
             />
+
             {/* <AppBar position="fixed" className={classes.appBar}>
               <Toolbar>
                 <Typography variant="h6" noWrap>
