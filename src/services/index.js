@@ -8,7 +8,7 @@ axios.defaults.baseURL = API_ROOT;
 
 function handleErrors(error) {
   if (error.response) {
-    alert(error.response.data.error);
+    alert(error.response.data.errors);
     console.log(error.response.status);
     console.log(error.response.headers);
   } else if (error.request) {
