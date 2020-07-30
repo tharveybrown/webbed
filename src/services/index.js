@@ -139,7 +139,6 @@ export function fetchChannelKeywords(id) {
 export function isLoggedIn() {
   const token = localStorage.getItem("token");
   if (token) {
-    console.log("TOKEN TRUE", token);
     return true;
   }
   console.log("TOKEN false", token);
