@@ -7,7 +7,7 @@ import Sidebar from "./Layout/Sidebar";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import AppRouter from "./router";
 import { light, dark, overrides } from "../themes/default";
-
+import Background from "./Background.svg";
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 import { makeStyles } from "@material-ui/core/styles";
 import Brightness3Icon from "@material-ui/icons/Brightness3";
@@ -22,6 +22,9 @@ const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
   },
+  // backgroundImage: {
+  //   width: "100%",
+  // },
   wrapper: {
     margin: theme.spacing(1),
     position: "relative",
@@ -235,22 +238,27 @@ function App(props) {
               icon={icon}
             />
           </>
-          <main className={classes.content}>
-            <div className={classes.toolbar} />
-            <AppRouter
-              authenticateSlack={authenticateSlack}
-              slackTeam={slackTeam}
-              handleLogout={handleLogout}
-              isLoggedIn={isLoggedIn}
-              coworkers={coworkers}
-              user={user}
-              updateTeam={updateTeam}
-              submitFeedback={submitFeedback}
-              updateFeedback={updateFeedback}
-              handleLogin={handleLogin}
-              requestFeedback={requestFeedback}
-            />
-          </main>
+          <div
+            className={classes.content}
+            style={{ backgroundImage: `url(${Background})` }}
+          >
+            <main>
+              <div className={classes.toolbar} />
+              <AppRouter
+                authenticateSlack={authenticateSlack}
+                slackTeam={slackTeam}
+                handleLogout={handleLogout}
+                isLoggedIn={isLoggedIn}
+                coworkers={coworkers}
+                user={user}
+                updateTeam={updateTeam}
+                submitFeedback={submitFeedback}
+                updateFeedback={updateFeedback}
+                handleLogin={handleLogin}
+                requestFeedback={requestFeedback}
+              />
+            </main>
+          </div>
         </Router>
       </div>
     </MuiThemeProvider>
