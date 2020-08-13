@@ -13,7 +13,7 @@ import ChannelAccordion from "./ChannelAccordion";
 import KeywordChart from "./KeywordChart";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
-import { Paper } from "@material-ui/core";
+import Paper from "@material-ui/core/Paper";
 import Widget from "../components/Team/Widget";
 import Typography from "@material-ui/core/Typography";
 
