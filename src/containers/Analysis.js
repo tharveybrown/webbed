@@ -120,7 +120,11 @@ class Analysis extends Component {
   };
 
   handleKeywordSearch = () => {
-    if (isLoggedIn() && !this.state.topChannels.length > 0) {
+    if (
+      isLoggedIn() &&
+      !this.state.topChannels.length > 0 &&
+      !!this.props.slackTeam
+    ) {
       fetchTopChannelAttributes()
         .then((res) => {
           this.setState({
