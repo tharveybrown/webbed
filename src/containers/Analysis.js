@@ -13,7 +13,9 @@ import ChannelAccordion from "./ChannelAccordion";
 import KeywordChart from "./KeywordChart";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
+import Paper from "@material-ui/core/Paper";
 import Widget from "../components/Team/Widget";
+import Typography from "@material-ui/core/Typography";
 
 import LinearProgress from "@material-ui/core/LinearProgress";
 import { withStyles } from "@material-ui/core/styles";
@@ -24,7 +26,7 @@ const styles = (theme) => ({
     margin: theme.spacing(1),
   },
   paper: {
-    height: 420,
+    padding: theme.spacing(2),
     margin: theme.spacing(1),
   },
   loader: {
@@ -193,12 +195,15 @@ class Analysis extends Component {
     return (
       <Grid container spacing={3}>
         <Grid item xs={12}>
-          <Widget
-            title="Select a Slack channel to run personality insights."
-            upperTitle
-            className={classes.card}
-            bodyClass={classes.fullHeightBody}
+          <Paper
+            // title="Select a Slack channel to run personality insights."
+            // upperTitle
+            className={classes.paper}
+            // bodyClass={classes.fullHeightBody}
           >
+            <Typography variant="h4" gutterBottom>
+              Select a Slack channel to run personality insights.
+            </Typography>
             <SearchChannels
               fetchAndUpdate={() => fetchAndUpdateChannels()}
               handleSearchSubmit={this.handleSearchSubmit}
@@ -220,15 +225,14 @@ class Analysis extends Component {
                 blueColoring={0}
               />
             ) : null}
-          </Widget>
+          </Paper>
         </Grid>
         <Grid item xs={12}>
-          <Widget
-            title="Identify top channel keywords."
-            upperTitle
-            className={classes.card}
-            bodyClass={classes.fullHeightBody}
-          >
+          <Paper className={classes.paper}>
+            <Typography variant="h4" gutterBottom>
+              Identify top channel keywords.
+            </Typography>
+
             <Button
               variant="outlined"
               color="primary"
@@ -267,7 +271,7 @@ class Analysis extends Component {
                 analysis={this.state.entities}
               />
             ) : null}
-          </Widget>
+          </Paper>
         </Grid>
       </Grid>
     );
