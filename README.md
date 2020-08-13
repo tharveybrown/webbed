@@ -2,7 +2,7 @@
 
 HR tech application with built-in slack bot that integrates with IBM Watson's Personality Insights and Natural Language Understanding. The backend for this application is built with Ruby on Rails and can be found [here](https://github.com/tharveybrown/teams-backend).
 
-THis application requires a slack client id, which can be obtained after [registering a new bot](https://api.slack.com/apps). Once registered, set the following redirect uris:
+This application requires a slack client id, which can be obtained after [registering a new bot](https://api.slack.com/apps). Once registered, set the following redirect uris:
 
 - http://localhost:3001/auth/callback
 - http://localhost:3000/dashboard

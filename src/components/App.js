@@ -21,10 +21,13 @@ const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
+    width: "100%",
+    // backgroundImage: `url(${Background})`,
+    // backgroundSize: "cover",
+    // height: 0,
+    // padding: 0 /* reset */,
   },
-  // backgroundImage: {
-  //   width: "100%",
-  // },
+
   wrapper: {
     margin: theme.spacing(1),
     position: "relative",
@@ -240,8 +243,9 @@ function App(props) {
           </>
           <div
             className={classes.content}
-            style={{ backgroundImage: `url(${Background})` }}
+            // style={{ backgroundImage: `url(${Background})` }}
           >
+            {/* <img src={Background} style={{ width: "100%" }}></img> */}
             <main>
               <div className={classes.toolbar} />
               <AppRouter
